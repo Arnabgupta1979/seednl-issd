@@ -64,6 +64,16 @@ body.rec .stage{width:min(100vw,calc(100dvh * 1.7777778));box-shadow:none}
 body.rec .hud{display:block}
 body.rec.playing{cursor:none}
 body.rec.playing .hud{opacity:0}
+/* Viewer mode (default): the editing panel is hidden; add ?edit=1 to the address to bring it back. */
+.vbar{display:none}
+body:not(.edit) .panel{display:none}
+body:not(.edit) .app{grid-template-columns:minmax(0,1fr)}
+body:not(.edit) .stagewrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+body:not(.edit) .stage{width:min(100%,calc((100dvh - 110px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)) * 1.7777778))}
+body:not(.edit) .vbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;width:min(100%,calc((100dvh - 110px) * 1.7777778))}
+body:not(.edit) .vbar input[type=range]{flex:1 1 140px;min-width:120px}
+body.rec .vbar{display:none!important}
+.vbar button{min-width:84px}
 @media (max-width:860px){
   .app{grid-template-columns:1fr;height:auto}
   .stage{width:100%}
@@ -88,6 +98,13 @@ button.big{width:100%;padding:14px;font-size:17px}
       <svg id="caps" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
       <div class="vig"></div>
       <div class="grain" id="grain"></div>
+    </div>
+    <div class="vbar" role="group" aria-label="Playback controls">
+      <button id="vplay" type="button">Play</button>
+      <button id="vpause" type="button" class="alt" disabled>Pause</button>
+      <button id="vrestart" type="button" class="alt">Restart</button>
+      <input id="vseek" type="range" min="0" max="80" step="0.01" value="0" aria-label="Timeline">
+      <span class="time" id="vclock">0:00.0</span>
     </div>
   </section>
 
@@ -650,8 +667,9 @@ function render(T){
     }
   }
   setCaption(str);
-  $('clock').textContent=fmt(T);
+  $('clock').textContent=fmt(T);$('vclock').textContent=fmt(T);
   if(document.activeElement!==$('seek'))$('seek').value=T;
+  if(document.activeElement!==$('vseek'))$('vseek').value=T;
 }
 
 /* ---------- player ---------- */
@@ -671,7 +689,7 @@ function play(){
   if(poster||T>=total-.05){T=0;audioStarted=false}
   poster=false;playing=true;last=performance.now();
   document.body.classList.add('playing');
-  $('play').textContent='Pause';
+  $('play').textContent='Pause';$('vplay').disabled=true;$('vpause').disabled=false;
   if(audioDur&&T>=LEAD){audioStarted=true;vo.currentTime=T-LEAD;vo.play().catch(()=>{})}
   raf=requestAnimationFrame(tick);
 }
@@ -679,12 +697,17 @@ function stop(done){
   playing=false;cancelAnimationFrame(raf);vo.pause();audioStarted=false;
   document.body.classList.remove('playing');
   $('play').textContent=done?'Play again':'Play';
+  $('vplay').textContent=done?'Play again':(T>0.05&&!poster?'Resume':'Play');$('vplay').disabled=false;$('vpause').disabled=true;
   if(done&&recMode){$('hudmsg').textContent='Finished';$('hudsub').textContent='Stop your recorder now.'}
 }
 function seekTo(t){T=clamp(t,0,total);poster=false;audioStarted=false;if(audioDur){if(T>=LEAD){vo.currentTime=T-LEAD;if(playing){audioStarted=true;vo.play().catch(()=>{})}}else vo.pause()}render(T)}
 $('play').onclick=()=>playing?stop(false):play();
 $('restart').onclick=()=>{stop(false);seekTo(0);play()};
 $('seek').addEventListener('input',e=>seekTo(+e.target.value));
+$('vplay').onclick=play;$('vpause').onclick=()=>stop(false);
+$('vrestart').onclick=()=>{stop(false);seekTo(0);play()};
+$('vseek').addEventListener('input',e=>seekTo(+e.target.value));
+if(/[?&]edit=1/.test(location.search))document.body.classList.add('edit');
 
 /* ---------- record mode ---------- */
 function startRec(){
@@ -825,7 +848,7 @@ async function init(){
   $('capt').setAttribute('aria-pressed',capsOn);$('capt').textContent=capsOn?'Captions on':'Captions off';
   recalc();buildPanel();
   if(EMBED){vo.src=EMBED.src;audioDur=EMBED.dur;applyBounds(EMBED.bounds,EMBED.wins);['tap','fit'].forEach(k=>$(k).disabled=false);status('Recorded narration is built in. To try another voice file, load it above.')}
-  $('seek').max=total;$('total').textContent='/ '+fmt(total);
+  $('seek').max=total;$('vseek').max=total;$('total').textContent='/ '+fmt(total);
   render(POSTER);
   window.__ai={render:t=>{playing=false;render(t)},total:()=>total,starts:()=>ord.map(i=>starts[i]),cu:(i,j)=>cu(i,j),setInc7:v=>{inc7=v;recalc()},D:()=>D.slice(),ord:()=>ord.slice(),bounds:applyBounds};
 }

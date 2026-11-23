@@ -30,3 +30,7 @@ Not yet tested (TalentLMS vs Curatr undecided). Candidate: an iframe pointing at
 
 ## Limits
 Generic seed-system statements need expert review (`demos/g01-seed-choices/docs/Source_register.md`). Not tested on real LMS, screen reader, phone, Safari or Firefox.
+
+## Viewer mode and editing
+
+The explainer opens in viewer mode: stage, Play, Pause, Restart and a timeline. The editing panel (narration loading, timing, record mode) is hidden. Add `?edit=1` to the address to bring it back. This only hides the panel. It is not a security lock, and nobody can change the published file without access to the repository.
