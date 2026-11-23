@@ -1,0 +1,659 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>__PROJECT_TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+
+
+
+<style>
+/* Layout concept: a dark studio table holding one 16:9 paper-cut stage, with a quiet control panel beside it. */
+:root{
+  --ink:#1d2a23; --moss:#2f5a3e; --leaf:#5a9a4a; --olive:#6d8a3c; --ochre:#e0a63a; --sun:#f2c14e;
+  --terra:#c4553a; --clay:#a8452f; --cream:#f3e6c8; --sand:#e8cf9a; --night:#14201b; --warn:#e2381f;
+  --table:#0e1612; --panel:#17231d; --line:#2c4036; --muted:#a9b8ac; --accent:#f2c14e;
+  --display:'Egypt Paper Sans','DejaVu Sans',Arial,sans-serif;
+  --body:'Egypt Paper Sans','DejaVu Sans',Arial,sans-serif;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--table);color:var(--cream);font:16px/1.45 var(--body);
+  padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:24px;height:100%;min-height:0}
+.stagewrap{display:grid;place-items:center;min-width:0;min-height:0}
+.stage{position:relative;overflow:hidden;background:var(--moss);aspect-ratio:16/9;
+  width:min(100%,calc((100dvh - 32px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)) * 1.7777778));
+  box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.layer{position:absolute;inset:0;visibility:hidden;will-change:transform}
+.layer.on{visibility:visible}
+.layer.over{box-shadow:-40px 0 70px rgba(0,0,0,.45)}
+.layer svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+#caps{position:absolute;inset:0;pointer-events:none}
+.grain{position:absolute;inset:0;pointer-events:none;mix-blend-mode:multiply;opacity:.4}
+.vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(20,12,6,.32))}
+svg text{font-kerning:normal}
+.d{font-family:var(--display);font-weight:800}
+.b{font-family:var(--body);font-weight:700}
+.m{font-family:var(--mono);font-weight:500}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;overflow:auto;min-height:0;
+  display:flex;flex-direction:column;gap:18px}
+.panel h1{font:800 22px/1.15 var(--display);margin:0;color:var(--cream)}
+.panel p{margin:0;color:var(--muted);font-size:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button,.btn{font:700 15px var(--body);color:var(--night);background:var(--accent);border:0;border-radius:6px;padding:9px 14px;cursor:pointer}
+button.alt{background:transparent;color:var(--cream);border:1px solid var(--line)}
+button.alt[aria-pressed="true"]{background:var(--cream);color:var(--night)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--cream);outline-offset:2px}
+button:hover{filter:brightness(1.08)}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+input[type=text],input[type=number]{width:100%;background:var(--night);color:var(--cream);border:1px solid var(--line);border-radius:6px;padding:8px;font:15px var(--body)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.time{font:500 14px var(--mono);color:var(--cream)}
+.durs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.durs label{margin:0;font-size:12px}
+details summary{cursor:pointer;font-weight:700;color:var(--cream)}
+ol{margin:8px 0 0;padding-left:20px;color:var(--muted);font-size:14px}
+ol li{margin:4px 0}
+.hud{display:none;position:fixed;left:24px;top:24px;z-index:20;font:800 28px/1.2 var(--display);color:var(--cream);max-width:300px}
+.hud small{display:block;font:400 14px var(--body);color:var(--muted);margin-top:6px}
+.hud button{margin-top:12px}
+body.rec{padding:0}
+body.rec .app{grid-template-columns:1fr}
+body.rec .panel{display:none}
+body.rec .stage{width:min(100vw,calc(100dvh * 1.7777778));box-shadow:none}
+body.rec .hud{display:block}
+body.rec.playing{cursor:none}
+body.rec.playing .hud{opacity:0}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;height:auto}
+  .stage{width:100%}
+  .stagewrap{place-items:start center}
+}
+
+button:disabled{opacity:.4;cursor:default;filter:none}
+button.big{width:100%;padding:14px;font-size:17px}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--muted);margin:0}
+.chk input{margin-top:3px;accent-color:var(--accent)}
+.box{border:1px solid var(--line);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.box h2{font:800 15px/1.2 var(--display);margin:0;color:var(--cream);letter-spacing:.02em}
+.kv{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.kv .time{font-size:13px}
+#vostat{min-height:3.2em}
+</style>
+
+
+<main class="app">
+  <section class="stagewrap" aria-label="Animation stage">
+    <div class="stage" id="stage">
+      <svg id="caps" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
+      <div class="vig"></div>
+      <div class="grain" id="grain"></div>
+    </div>
+  </section>
+
+  <aside class="panel" aria-label="Controls">
+    <div>
+      <h1>__PROJECT_TITLE__</h1>
+      <p>An illustrated learning presentation. Load your English narration to estimate scene boundaries from pauses, then check them by ear.</p>
+    </div>
+
+    <div class="row">
+      <button id="play" type="button">Play</button>
+      <button id="restart" type="button" class="alt">Restart</button>
+      <button id="rec" type="button" class="alt">Record mode</button>
+    </div>
+
+    <div>
+      <input id="seek" type="range" min="0" max="80" step="0.01" value="0" aria-label="Timeline">
+      <div class="row" style="justify-content:space-between"><span class="time" id="clock">0:00.0</span><span class="time" id="total"></span></div>
+      <div class="row" id="jumps" style="margin-top:8px"></div>
+    </div>
+
+    <div class="box">
+      <h2>Match the picture to your voice</h2>
+      <div>
+        <label for="vo">1. Narration file (MP3 or WAV)</label>
+        <input id="vo" type="file" accept="audio/*">
+      </div>
+      <label hidden><input id="inc7" type="checkbox" checked></label>
+      <div class="row">
+        <button id="auto" type="button" disabled>2. Auto-time</button>
+        <button id="tap" type="button" class="alt" disabled>Tap to sync</button>
+        <button id="fit" type="button" class="alt" disabled>Fit by words</button>
+      </div>
+      <div id="tapbox" hidden>
+        <button id="tapnow" type="button" class="big">Next scene starts now</button>
+        <p id="tapmsg" style="margin-top:8px"></p>
+        <div class="row" style="margin-top:8px"><button id="tapcancel" type="button" class="alt">Cancel</button></div>
+      </div>
+      <details>
+        <summary>Pause detection</summary>
+        <div style="margin-top:10px">
+          <div class="kv"><label for="sens">Silence is this far below speech</label><span class="time" id="sensv">35 dB</span></div>
+          <input id="sens" type="range" min="20" max="55" step="1" value="35">
+          <div class="kv" style="margin-top:8px"><label for="mingap">Shortest pause counted</label><span class="time" id="mingapv">0.50 s</span></div>
+          <input id="mingap" type="range" min="0.25" max="1.5" step="0.05" value="0.5">
+        </div>
+      </details>
+      <p id="vostat">No narration loaded. Scene lengths follow the script estimate.</p>
+      <button id="voiceon" type="button" class="alt" aria-pressed="true">Narration audible: on</button>
+    </div>
+
+    <div class="row">
+      <button id="capt" type="button" class="alt" aria-pressed="true">Captions on</button>
+    </div>
+
+    <div>
+      <label hidden for="tag">End card line</label>
+      <input hidden id="tag" type="text" value="__END_LINE__" maxlength="48">
+    </div>
+
+    <details>
+      <summary>Scene lengths (seconds)</summary>
+      <div class="durs" id="durs" style="margin-top:10px"></div>
+      <div class="row" style="margin-top:10px"><button id="reset" type="button" class="alt">Reset lengths</button></div>
+    </details>
+
+    <details open>
+      <summary>How to record</summary>
+      <ol>
+        <li>Load the narration so the picture follows it. Check the scene changes by scrubbing the timeline.</li>
+        <li>Open your screen recorder and choose this browser window or tab. Include system audio if you want the voice captured too.</li>
+        <li>Click <b>Record mode</b>. The page goes full screen and counts down 5 seconds beside the stage.</li>
+        <li>The animation plays once. When the side message says <b>Finished</b>, stop the recorder.</li>
+        <li>Crop to the landscape stage and export at 1920 × 1080. Or record silently and lay the narration and music in your editor.</li>
+      </ol>
+    </details>
+  </aside>
+</main>
+
+<div class="hud" id="hud" role="status"><span id="hudmsg"></span><small id="hudsub"></small><button id="hudexit" type="button" class="alt">Exit record mode</button></div>
+<audio id="voice" preload="auto"></audio>
+
+<script>
+(()=>{
+'use strict';
+const W=1920,H=1080,NS='http://www.w3.org/2000/svg';
+const cs=getComputedStyle(document.documentElement);
+const C={};
+['ink','moss','leaf','olive','ochre','sun','terra','clay','cream','sand','night','warn'].forEach(k=>C[k]=cs.getPropertyValue('--'+k).trim());
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const mk=(tag,attrs,parent)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e};
+const rng=seed=>{let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}};
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const seg=(u,a,b)=>clamp((u-a)/(b-a));
+const eo=t=>1-Math.pow(1-t,3);
+const eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const eb=t=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const f1=n=>(Math.round(n*10)/10).toFixed(1);
+
+function smooth(p,closed){
+  const n=p.length;let d=`M${p[0][0].toFixed(1)} ${p[0][1].toFixed(1)}`;
+  const get=i=>closed?p[(i+n)%n]:p[Math.max(0,Math.min(n-1,i))];
+  const m=closed?n:n-1;
+  for(let i=0;i<m;i++){
+    const p0=get(i-1),p1=get(i),p2=get(i+1),p3=get(i+2);
+    const c1=[p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6],c2=[p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6];
+    d+=`C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+  }
+  return closed?d+'Z':d;
+}
+function blobD(cx,cy,rx,ry,seed,n=12,j=.1){const r=rng(seed),pts=[];for(let i=0;i<n;i++){const a=i/n*Math.PI*2,k=1+(r()-.5)*2*j;pts.push([cx+Math.cos(a)*rx*k,cy+Math.sin(a)*ry*k])}return smooth(pts,true)}
+function hillD(y,amp,seed,step=100,bottom=H+40){const r=rng(seed),pts=[];for(let x=-80;x<=W+80;x+=step)pts.push([x,y+(r()-.5)*2*amp]);return smooth(pts,false)+`L${W+80} ${bottom}L-80 ${bottom}Z`}
+function rectD(x,y,w,h,seed,j=3){const q=rng(seed),J=()=>(q()-.5)*2*j;return `M${x+J()} ${y+J()}L${x+w+J()} ${y+J()}L${x+w+J()} ${y+h+J()}L${x+J()} ${y+h+J()}Z`}
+function rrD(x,y,w,h,r){return `M${x+r} ${y}H${x+w-r}Q${x+w} ${y} ${x+w} ${y+r}V${y+h-r}Q${x+w} ${y+h} ${x+w-r} ${y+h}H${x+r}Q${x} ${y+h} ${x} ${y+h-r}V${y+r}Q${x} ${y} ${x+r} ${y}Z`}
+
+/* paper piece: a soft offset shadow plus the cut shape with a faint lit edge */
+function paper(parent,d,fill,o={}){
+  const g=mk('g',{},parent);
+  if(o.sh!==false)mk('path',{d,fill:'#000',opacity:o.op??.22,transform:`translate(${o.dx??6} ${o.dy??10})`},g);
+  mk('path',{d,fill,stroke:o.stroke??'rgba(255,255,255,.16)','stroke-width':o.sw??2,'stroke-linejoin':'round'},g);
+  return g;
+}
+const place=(g,x,y,s=1,r=0)=>g.setAttribute('transform',`translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${r}) scale(${s.toFixed(3)})`);
+const vis=(g,o)=>g.setAttribute('opacity',clamp(o).toFixed(3));
+function pop(g,p,x,y,r=0,s=1){ if(p<=0){vis(g,0);return} vis(g,p*5); place(g,x,y,eb(clamp(p))*s,r) }
+
+const fits=[];
+function txt(parent,s,x,y,size,o={}){
+  const t=mk('text',{x,y,'font-size':size,fill:o.fill||C.ink,'text-anchor':o.anchor||'start',class:o.cls||'d'},parent);
+  if(o.halo){t.setAttribute('stroke','rgba(10,18,14,.7)');t.setAttribute('stroke-width',7);t.setAttribute('paint-order','stroke');t.setAttribute('stroke-linejoin','round')}
+  t.textContent=s;
+  if(o.maxW)fits.push({t,size,maxW:o.maxW,min:o.min||22});
+  return t;
+}
+function refit(){fits.forEach(f=>{f.t.setAttribute('font-size',f.size);const w=f.t.getComputedTextLength();if(w>f.maxW)f.t.setAttribute('font-size',Math.max(f.min,f.size*f.maxW/w))})}
+
+/* a slip of paper with one or more lines of text; local origin is its centre */
+function slip(parent,lines,size,o={}){
+  if(typeof lines==='string')lines=[lines];
+  const g=mk('g',{},parent),lh=size*1.2;
+  const holder=mk('g',{},g);
+  const ts=lines.map((l,i)=>txt(g,l,0,(i-(lines.length-1)/2)*lh+size*.34,size,{fill:o.tc||C.ink,anchor:'middle',cls:o.cls||'d',maxW:o.maxW?o.maxW-size*.9:0}));
+  refit();
+  let w=0;ts.forEach(t=>w=Math.max(w,t.getComputedTextLength()));
+  w+=size*.9;const h=lines.length*lh+size*.45;
+  paper(holder,rectD(-w/2,-h/2,w,h,o.seed||7,size*.03),o.fill||C.cream,{dx:6,dy:10});
+  g._w=w;g._h=h;g._ts=ts;
+  return g;
+}
+
+/* ---------- illustration pieces ---------- */
+function leafG(parent,x,y,rot,sc,fill,mottle){
+  const g=mk('g',{transform:`translate(${x} ${y}) rotate(${rot}) scale(${sc})`},parent);
+  for(let i=-3;i<=3;i++){
+    const lobe=mk('g',{transform:`rotate(${i*24}) scale(${1-Math.abs(i)*.08})`},g);
+    paper(lobe,'M0 0C-12 -22 -15 -62 0 -95C15 -62 12 -22 0 0Z',fill,{dx:2,dy:4,op:.2,sw:1.5});
+    mk('path',{d:'M0 -4L0 -84',stroke:'rgba(0,0,0,.12)','stroke-width':1.6,fill:'none'},lobe);
+    if(mottle&&mottle[i]){
+      const r=rng(40+i);
+      mk('path',{d:blobD(-1,-52,7,12,40+i,8,.25),fill:'#e3c04a',opacity:.92},lobe);
+      mk('path',{d:blobD(3,-72,4,7,50+i,7,.25),fill:'#e3c04a',opacity:.85},lobe);
+      mk('path',{d:blobD(-3,-30,3.5,6,60+i,7,.25),fill:'#d8b23a',opacity:.8},lobe);
+    }
+  }
+  return g;
+}
+function cassava(parent,x,y,s){
+  const g=mk('g',{transform:`translate(${x} ${y}) scale(${s})`},parent);
+  mk('path',{d:'M0 0C-4 -50 6 -100 0 -150',stroke:'#7a5a35','stroke-width':9,fill:'none','stroke-linecap':'round'},g);
+  leafG(g,0,-150,0,.95,'#5a9a4a');leafG(g,-6,-108,-58,.75,'#4f8a45');leafG(g,6,-100,54,.75,'#63a352');
+  return g;
+}
+function acacia(parent,x,y,s,seed){
+  const g=mk('g',{transform:`translate(${x} ${y}) scale(${s})`},parent);
+  paper(g,'M-16 0C-10 -60 -34 -120 -64 -170C-30 -150 -4 -110 6 -70C14 -110 40 -150 72 -176C42 -120 26 -60 20 0Z','#4a3523',{dx:4,dy:6});
+  paper(g,blobD(0,-190,240,48,seed,14,.07),'#2d5b3e',{dx:6,dy:12});
+  paper(g,blobD(-90,-214,120,32,seed+1,12,.1),'#3f7a48',{sh:false});
+  paper(g,blobD(100,-208,112,30,seed+2,12,.1),'#3f7a48',{sh:false});
+  return g;
+}
+function phoneG(parent,w=280,h=500){
+  const g=mk('g',{},parent);
+  paper(g,rrD(-w/2,-h/2,w,h,36),'#27342d',{dx:10,dy:14,op:.28});
+  mk('path',{d:rrD(-w/2+14,-h/2+14,w-28,h-28,26),fill:'#0d1713'},g);
+  mk('rect',{x:-30,y:-h/2+24,width:60,height:8,rx:4,fill:'#27342d'},g);
+  return g;
+}
+function person(parent,x,y,s,o={}){
+  const g=mk('g',{transform:`translate(${x} ${y}) scale(${o.flip?-s:s} ${s})`},parent);
+  const skin=o.skin||'#8a4f31',shirt=o.shirt||C.terra,pants=o.pants||'#2b3a4a',hair=o.hair||'#1b1410';
+  paper(g,'M-27 -82H27L25 0H5V-52H-5V0H-25Z',pants,{dx:3,dy:4,op:.2});
+  paper(g,'M-35 -152Q-42 -110 -31 -80H31Q42 -110 35 -152Q0 -166 -35 -152Z',shirt,{dx:3,dy:4,op:.2});
+  paper(g,blobD(0,-190,27,29,3,8,.04),skin,{dx:2,dy:3,op:.2});
+  if(o.back!==false)paper(g,blobD(0,-193,28,27,5,8,.04),hair,{sh:false});
+  if(o.hat)paper(g,blobD(0,-208,56,12,2,10,.05),o.hat,{dx:3,dy:5,op:.22});
+  if(o.hat)paper(g,blobD(0,-216,30,16,4,8,.05),o.hat,{sh:false});
+  if(o.ear){
+    mk('path',{d:'M-30 -140C-58 -128 -54 -182 -34 -198',stroke:shirt,'stroke-width':18,fill:'none','stroke-linecap':'round'},g);
+    const p=mk('rect',{x:-50,y:-214,width:15,height:30,rx:4,fill:'#101914',transform:'rotate(12 -42 -200)'},g);
+  } else if(o.down){
+    mk('path',{d:'M-32 -140C-46 -110 -44 -84 -40 -70',stroke:shirt,'stroke-width':17,fill:'none','stroke-linecap':'round'},g);
+    mk('rect',{x:-50,y:-76,width:18,height:30,rx:4,fill:'#101914'},g);
+  } else if(o.hold){
+    mk('path',{d:'M-32 -140C-60 -122 -66 -100 -58 -92',stroke:shirt,'stroke-width':17,fill:'none','stroke-linecap':'round'},g);
+    mk('rect',{x:-80,y:-122,width:26,height:44,rx:5,fill:'#101914',transform:'rotate(-12 -67 -100)'},g);
+  } else {
+    mk('path',{d:'M-34 -140C-40 -112 -38 -90 -36 -84',stroke:shirt,'stroke-width':16,fill:'none','stroke-linecap':'round'},g);
+  }
+  mk('path',{d:'M34 -140C40 -112 38 -90 36 -84',stroke:shirt,'stroke-width':16,fill:'none','stroke-linecap':'round'},g);
+  return g;
+}
+function mast(parent,x,y,s){
+  const g=mk('g',{transform:`translate(${x} ${y}) scale(${s})`},parent);
+  paper(g,'M-34 0L0 -300L34 0Z',C.ink,{dx:6,dy:8});
+  mk('path',{d:'M-20 -4L0 -240L20 -4Z',fill:'#6d8a3c'},g);
+  [-60,-110,-160,-205].forEach((yy,i)=>mk('rect',{x:-30+i*5.6,y:yy,width:60-i*11.2,height:8,fill:C.ink},g));
+  paper(g,rrD(-40,-318,80,26,6),C.cream,{dx:4,dy:6});
+  return g;
+}
+function wifiArc(r,cy=0){const a1=-135*Math.PI/180,a2=-45*Math.PI/180;return `M${(r*Math.cos(a1)).toFixed(1)} ${(cy+r*Math.sin(a1)).toFixed(1)}A${r} ${r} 0 0 1 ${(r*Math.cos(a2)).toFixed(1)} ${(cy+r*Math.sin(a2)).toFixed(1)}`}
+function foot(svg,s){ if(!s)return; s.split('\n').forEach((l,i)=>txt(svg,l,72,1500+i*40,32,{fill:C.cream,cls:'b',halo:true,maxW:880,min:24})) }
+function newScene(){return {}}
+
+
+
+/*__BEATS__*/
+
+/* ---------- shared pieces for these scenes ---------- */
+function cloudG(parent,fill){
+  const g=mk('g',{},parent);
+  const parts=[[0,10,150,78],[-112,34,92,58],[118,36,100,60],[-40,-44,92,70],[58,-34,86,64]];
+  parts.forEach(([x,y,rx,ry],i)=>mk('path',{d:blobD(x,y,rx,ry,i+3,10,.05),fill:'#000',opacity:.22,transform:'translate(6 10)'},g));
+  parts.forEach(([x,y,rx,ry],i)=>mk('path',{d:blobD(x,y,rx,ry,i+3,10,.05),fill},g));
+  return g;
+}
+function furrows(svg,top,a,b){for(let i=0;i<12;i++){const xb=-900+i*210,xt=540+(xb-540)*.15;mk('path',{d:`M${xt} ${top}L${xt+16} ${top}L${xb+105} ${H+20}L${xb} ${H+20}Z`,fill:i%2?a:b},svg)}}
+function disc(parent,n,r=62,fill){
+  const g=mk('g',{},parent);
+  paper(g,blobD(0,0,r,r,n+4,12,.03),fill||C.terra,{dx:3,dy:5,op:.3});
+  txt(g,String(n),0,r*.46,r*1.35,{fill:C.cream,anchor:'middle'});
+  return g;
+}
+function ruleCard(parent,n,lines,o={}){
+  const w=o.w||920,h=o.h||200,g=mk('g',{},parent),size=o.size||52;
+  paper(g,rectD(-w/2,-h/2,w,h,n*5+1,2.5),o.fill||C.cream,{dx:6,dy:10,op:.3});
+  const d=disc(g,n,o.r||62,o.disc);d.setAttribute('transform',`translate(${-w/2+100} ${o.top?-h/2+100:0})`);
+  lines.forEach((l,i)=>txt(g,l,-w/2+200,(o.top?-h/2+100:0)+(i-(lines.length-1)/2)*size*1.2+size*.34,size,{fill:o.tc||C.ink,cls:i?'b':'d',maxW:w-200-(o.iconW||170)-34,min:26}));
+  g._icon=mk('g',{transform:`translate(${w/2-96} ${o.top?-h/2+100:0})`},g);
+  return g;
+}
+function icKey(g){
+  paper(g,blobD(-30,0,34,34,2,10,.03),C.ochre,{dx:2,dy:4,op:.25});mk('circle',{cx:-30,cy:0,r:12,fill:C.cream},g);
+  paper(g,'M0 -10H66V10H50V30H36V10H0Z',C.ochre,{dx:2,dy:4,op:.25});
+}
+function icCheck(g){
+  paper(g,rrD(-46,-46,92,92,20),C.leaf,{dx:3,dy:5,op:.25});
+  mk('path',{d:'M-25 2L-8 21L27 -19',stroke:C.cream,'stroke-width':13,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},g);
+}
+function icHour(g){
+  paper(g,'M-38 -60H38L7 0L38 60H-38L-7 0Z',C.sand,{dx:2,dy:4,op:.25});
+  mk('path',{d:'M-44 -60H44M-44 60H44',stroke:C.ink,'stroke-width':10,'stroke-linecap':'round'},g);
+  g._top=mk('path',{d:'M-24 -48H24L4 -8H-4Z',fill:C.ochre},g);
+  g._bot=mk('path',{d:'M-26 52H26L14 20H-14Z',fill:C.ochre},g);
+}
+function icToggle(g){
+  const t=paper(g,rrD(-76,-38,152,76,38),C.leaf,{dx:3,dy:5,op:.25});
+  g._bg=t.lastChild;g._knob=mk('circle',{cx:38,cy:0,r:30,fill:C.cream},g);
+}
+function icTable(g){
+  paper(g,rectD(-62,-50,124,100,9,2),C.cream,{dx:3,dy:5,op:.25});
+  mk('rect',{x:-62,y:-50,width:124,height:26,fill:C.moss},g);
+  [-20,20].forEach(x=>mk('path',{d:`M${x} -24L${x} 50`,stroke:C.ink,'stroke-width':3,opacity:.45},g));
+  [2,26].forEach(y=>mk('path',{d:`M-62 ${y}L62 ${y}`,stroke:C.ink,'stroke-width':3,opacity:.45},g));
+}
+function icBin(g){
+  paper(g,'M-40 -34H40L32 56H-32Z',C.sand,{dx:3,dy:5,op:.25});
+  paper(g,rrD(-50,-52,100,16,6),C.ink,{dx:2,dy:3,op:.2});
+  [-16,0,16].forEach(x=>mk('path',{d:`M${x} -22L${x} 42`,stroke:C.ink,'stroke-width':5,opacity:.4,'stroke-linecap':'round'},g));
+}
+function icDoc(g){
+  paper(g,rectD(-44,-58,88,116,5,2),C.cream,{dx:3,dy:5,op:.25});
+  [-30,-10,10,30].forEach(y=>mk('path',{d:`M-28 ${y}L28 ${y}`,stroke:C.ink,'stroke-width':5,opacity:.3,'stroke-linecap':'round'},g));
+}
+
+/*__SCENES__*/
+
+/* ---------- timing: speech windows and chunk starts ---------- */
+let D=BEATS.map(b=>b.dur0),SW=BEATS.map(()=>null),inc7=true,ord=[],starts=[],total=0;
+/* speech window of a scene in local seconds: measured from the narration when available, otherwise the script estimate */
+function win(i){return SW[i]||[i===0?LEAD:.1,D[i]-.2]}
+/* chunk j of scene i starts here, in the scene's own u (0..1) units; visuals land a hair before the words */
+function cu(i,j){
+  const b=BEATS[i],w=win(i);let n=0;for(let k=0;k<j;k++)n+=b.chunks[k].w;
+  const t=w[0]+(n/b.words)*(w[1]-w[0])-.08,pre=i===0?LEAD:0;
+  return (t-pre)/(D[i]-pre);
+}
+
+
+
+/* ---------- build ---------- */
+const stage=$('stage');
+const builders=[/*__BUILDERS__*/];
+let scenes=[],layers=[],capsOn=true,voiceOn=true;
+const KEY='__PREFERENCES_KEY__';
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');if(Array.isArray(s.D)&&s.D.length===N&&s.D.every(x=>x>1))D=s.D;if(typeof s.tag==='string')$('tag').value=s.tag;if(s.capsOff)capsOn=false;if(s.skip7)inc7=false}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({D,tag:$('tag').value,capsOff:!capsOn,skip7:!inc7}))}catch(e){}}
+
+function makeGrain(){
+  const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d'),im=x.createImageData(256,256),r=rng(99);
+  for(let i=0;i<256*256;i++){const v=200+Math.floor(r()*55),k=i*4;im.data[k]=im.data[k+1]=im.data[k+2]=v;im.data[k+3]=255}
+  x.putImageData(im,0,0);
+  const g=$('grain');g.style.backgroundImage=`url(${c.toDataURL()})`;g.style.backgroundSize='256px 256px';
+}
+
+let caps=null;
+function build(){
+  const capsSvg=$('caps');
+  builders.forEach((fn,i)=>{
+    const layer=document.createElement('div');layer.className='layer';
+    const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('preserveAspectRatio','xMidYMid slice');svg.setAttribute('aria-hidden','true');
+    layer.appendChild(svg);stage.insertBefore(layer,capsSvg);layers.push(layer);
+    layer.classList.add('on');
+    scenes.push(fn(svg));
+    refit();
+    layer.classList.remove('on');
+  });
+  const cg=mk('g',{},capsSvg);
+  const cslip=mk('g',{},cg),ct=mk('text',{x:960,y:936,'font-size':52,'text-anchor':'middle',fill:C.ink,class:'b'},cg);
+  caps={g:cg,slip:cslip,t:ct,cur:''};
+  vis(cg,0);
+}
+function setCaption(str){
+  if(str===caps.cur)return;caps.cur=str;
+  while(caps.slip.firstChild)caps.slip.removeChild(caps.slip.firstChild);
+  while(caps.t.firstChild)caps.t.removeChild(caps.t.firstChild);
+  if(!str){vis(caps.g,0);return}
+  const size=41,maxW=1660;
+  caps.t.setAttribute('font-size',size);caps.t.textContent=str;
+  let lines=[str];
+  if(caps.t.getComputedTextLength()>maxW){const w=str.split(' ');let best=null;for(let k=1;k<w.length;k++){const a=w.slice(0,k).join(' '),b=w.slice(k).join(' ');const m=Math.max(a.length,b.length);if(!best||m<best.m)best={m,a,b}}lines=[best.a,best.b]}
+  caps.t.textContent='';
+  const lh=size*1.18;
+  lines.forEach((l,i)=>{const ts=mk('tspan',{x:960,y:936+(i-(lines.length-1)/2)*lh},caps.t);ts.textContent=l});
+  const bb=caps.t.getBBox(),pw=34,ph=18;
+  paper(caps.slip,rectD(bb.x-pw,bb.y-ph,bb.width+2*pw,bb.height+2*ph,Math.floor(bb.width),2.2),C.cream,{dx:5,dy:9,op:.3});
+  vis(caps.g,1);
+}
+
+/* ---------- timeline ---------- */
+function recalc(){
+  ord=BEATS.map((b,i)=>i).filter(i=>i!==OPT||inc7);
+  let a=0;starts=[];
+  ord.forEach((i,n)=>{starts[i]=a;a+=D[i]+(n===ord.length-1?TAIL:0)});
+  total=a;
+}
+const posAt=T=>{let n=0;for(let k=0;k<ord.length;k++)if(T>=starts[ord[k]])n=k;return n};
+const fmt=t=>{const m=Math.floor(t/60),s=t-m*60;return m+':'+(s<10?'0':'')+s.toFixed(1)};
+const WIPE=.7;
+function render(T){
+  T=clamp(T,0,total);
+  const n=posAt(T),i=ord[n],p=n>0?ord[n-1]:-1,lt=T-starts[i];
+  layers.forEach((l,k)=>l.classList.toggle('on',k===i||(k===p&&lt<WIPE)));
+  scenes.forEach((s,k)=>{
+    const pre=k===0?LEAD:0;
+    if(k===i)s.update((lt-pre)/(D[k]-pre),lt,D[k]);
+    else if(k===p&&lt<WIPE)s.update(1,D[k],D[k]);
+  });
+  layers.forEach((l,k)=>{
+    if(k===i&&p>=0&&lt<WIPE){l.style.transform=`translateX(${((1-eo(lt/WIPE))*100).toFixed(2)}%)`;l.classList.add('over')}
+    else{l.style.transform='';l.classList.remove('over')}
+  });
+  let str='';
+  if(capsOn){
+    const b=BEATS[i],w=win(i);
+    if(lt>=w[0]-.05&&lt<=w[1]+.25){
+      const fr=clamp((lt-w[0])/(w[1]-w[0]));let acc=0;
+      for(const c of b.chunks){acc+=c.w/b.words;if(fr<acc){str=c.s;break}}
+      if(!str)str=b.chunks[b.chunks.length-1].s;
+    }
+  }
+  setCaption(str);
+  $('clock').textContent=fmt(T);
+  if(document.activeElement!==$('seek'))$('seek').value=T;
+}
+
+/* ---------- player ---------- */
+const POSTER=6.4;
+let T=POSTER,playing=false,last=0,raf=0,poster=true,audioStarted=false,audioDur=0,recMode=false,cd=0;
+const vo=$('voice');
+function tick(now){
+  if(!playing)return;
+  const dt=Math.min(.1,(now-last)/1000);last=now;
+  if(audioDur&&!vo.paused&&!vo.ended)T=vo.currentTime+LEAD;else T+=dt;
+  if(audioDur&&!audioStarted&&T>=LEAD){audioStarted=true;vo.currentTime=Math.max(0,T-LEAD);vo.play().catch(()=>{})}
+  if(T>=total){T=total;render(T);stop(true);return}
+  render(T);raf=requestAnimationFrame(tick);
+}
+function play(){
+  if(playing)return;
+  if(poster||T>=total-.05){T=0;audioStarted=false}
+  poster=false;playing=true;last=performance.now();
+  document.body.classList.add('playing');
+  $('play').textContent='Pause';
+  if(audioDur&&T>=LEAD){audioStarted=true;vo.currentTime=T-LEAD;vo.play().catch(()=>{})}
+  raf=requestAnimationFrame(tick);
+}
+function stop(done){
+  playing=false;cancelAnimationFrame(raf);vo.pause();audioStarted=false;
+  document.body.classList.remove('playing');
+  $('play').textContent=done?'Play again':'Play';
+  if(done&&recMode){$('hudmsg').textContent='Finished';$('hudsub').textContent='Stop your recorder now.'}
+}
+function seekTo(t){T=clamp(t,0,total);poster=false;audioStarted=false;if(audioDur){if(T>=LEAD){vo.currentTime=T-LEAD;if(playing){audioStarted=true;vo.play().catch(()=>{})}}else vo.pause()}render(T)}
+$('play').onclick=()=>playing?stop(false):play();
+$('restart').onclick=()=>{stop(false);seekTo(0);play()};
+$('seek').addEventListener('input',e=>seekTo(+e.target.value));
+
+/* ---------- record mode ---------- */
+function startRec(){
+  recMode=true;document.body.classList.add('rec');
+  try{const p=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{})}catch(e){}
+  stop(false);seekTo(0);let n=5;
+  const show=()=>{$('hudmsg').textContent='Starting in '+n;$('hudsub').textContent='Start your recorder now.'};
+  show();clearInterval(cd);
+  cd=setInterval(()=>{n--;if(n<=0){clearInterval(cd);$('hudmsg').textContent='Recording';$('hudsub').textContent='';play()}else show()},1000);
+}
+function exitRec(){recMode=false;clearInterval(cd);document.body.classList.remove('rec');stop(false);try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}}
+$('rec').onclick=startRec;$('hudexit').onclick=exitRec;
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&recMode&&!playing)exitRec()});
+
+/* ---------- panel ---------- */
+function buildPanel(){
+  const j=$('jumps');j.innerHTML='';
+  ord.forEach((i,n)=>{const bt=document.createElement('button');bt.type='button';bt.className='alt';bt.textContent=String(i+1);bt.setAttribute('aria-label','Jump to scene '+(i+1));bt.onclick=()=>seekTo(starts[i]+.01);j.appendChild(bt)});
+  const du=$('durs');du.innerHTML='';
+  D.forEach((v,i)=>{
+    if(i===OPT&&!inc7)return;
+    const w=document.createElement('div');const l=document.createElement('label');l.htmlFor='d'+i;l.textContent='Scene '+(i+1);
+    const inp=document.createElement('input');inp.type='number';inp.id='d'+i;inp.min='2';inp.max='40';inp.step='0.1';inp.value=v;
+    inp.oninput=()=>{const x=parseFloat(inp.value);if(x>=2){D[i]=x;SW[i]=null;afterDurChange()}};
+    w.append(l,inp);du.appendChild(w);
+  });
+}
+function afterDurChange(){recalc();$('seek').max=total;$('total').textContent='/ '+fmt(total);save();render(clamp(T,0,total))}
+function status(s){$('vostat').textContent=s}
+$('reset').onclick=()=>{D=BEATS.map(b=>b.dur0);SW=BEATS.map(()=>null);buildPanel();afterDurChange()};
+$('capt').onclick=e=>{capsOn=!capsOn;e.currentTarget.setAttribute('aria-pressed',capsOn);e.currentTarget.textContent=capsOn?'Captions on':'Captions off';caps.cur='\u0000';save();render(T)};
+$('tag').addEventListener('input',()=>{scenes[LAST].setTag($('tag').value);save()});
+$('inc7').addEventListener('change',e=>{inc7=e.target.checked;SW=BEATS.map(()=>null);recalc();buildPanel();afterDurChange();status(inc7?'Scene 7 is in. Expect 7 long pauses in the narration (one between each pair of scenes).':'Scene 7 is out. Expect 6 long pauses in the narration.')});
+$('voiceon').onclick=e=>{voiceOn=!voiceOn;vo.muted=!voiceOn;e.currentTarget.setAttribute('aria-pressed',voiceOn);e.currentTarget.textContent=voiceOn?'Narration audible: on':'Narration audible: off (silent preview)'};
+
+/* ---------- narration: load, auto-time from pauses, tap to sync, fit by words ---------- */
+let env=null;
+async function decode(file){
+  const ab=await file.arrayBuffer(),Ctx=window.AudioContext||window.webkitAudioContext,ac=new Ctx();
+  let buf;
+  try{buf=await ac.decodeAudioData(ab)}finally{try{ac.close()}catch(e){}}
+  const ch=buf.getChannelData(0),hop=Math.round(buf.sampleRate*.02),nF=Math.floor(ch.length/hop);
+  env=new Float32Array(nF);
+  for(let f=0;f<nF;f++){let s=0;const o=f*hop;for(let k=0;k<hop;k++){const v=ch[o+k];s+=v*v}env[f]=10*Math.log10(s/hop+1e-12)}
+}
+/* silent runs below (peak level - sensitivity), at least minGap seconds long */
+function silences(){
+  const hop=.02,nF=env.length,sorted=Array.from(env).sort((a,b)=>a-b),peak=sorted[Math.floor(nF*.95)];
+  const thr=peak-(+$('sens').value),minGap=+$('mingap').value,runs=[];let s=-1;
+  for(let f=0;f<=nF;f++){
+    const quiet=f<nF&&env[f]<thr;
+    if(quiet&&s<0)s=f;
+    if(!quiet&&s>=0){runs.push([s*hop,f*hop]);s=-1}
+  }
+  const dur=nF*hop;let lead=0,trail=dur;const gaps=[];
+  runs.forEach(([a,b])=>{
+    if(a<.05)lead=b;
+    else if(b>dur-.05)trail=a;
+    else if(b-a>=minGap)gaps.push([a,b]);
+  });
+  return {lead,trail,gaps,dur};
+}
+/* bounds[n-1] = audio time where active scene n starts; wins = speech [start,end] per active scene, in audio time */
+function applyBounds(bounds,wins){
+  ord.forEach((i,n)=>{
+    const s=n===0?-LEAD:bounds[n-1],e=n===ord.length-1?audioDur+.3:bounds[n];
+    D[i]=+(e-s).toFixed(2);
+    SW[i]=wins?[+(wins[n][0]-s).toFixed(2),+(wins[n][1]-s).toFixed(2)]:null;
+  });
+  buildPanel();afterDurChange();
+}
+let autoOn=false;
+function autoTime(){
+  if(!env){status('Load the narration file first.');return}
+  const need=ord.length-1,r=silences();
+  if(r.gaps.length<need){
+    status(`Found ${r.gaps.length} long pauses but need ${need}. Lower “Pause detection” sensitivity or shorten the shortest pause, or use Tap to sync.`);return;
+  }
+  const pick=r.gaps.slice().sort((a,b)=>(b[1]-b[0])-(a[1]-a[0])).slice(0,need).sort((a,b)=>a[0]-b[0]);
+  const rest=r.gaps.filter(g=>!pick.includes(g)).map(g=>g[1]-g[0]).sort((a,b)=>b-a)[0]||0;
+  const shortest=Math.min(...pick.map(g=>g[1]-g[0]));
+  const bounds=pick.map(g=>Math.max((g[0]+g[1])/2,g[1]-.9));
+  const wins=ord.map((i,n)=>[n===0?r.lead:pick[n-1][1],n===need?r.trail:pick[n][0]]);
+  applyBounds(bounds,wins);autoOn=true;
+  status(`Timed to ${need+1} scenes from ${need} pauses (${pick.map(g=>(g[1]-g[0]).toFixed(1)).join(', ')} s).`+(rest>shortest*.75?' Warning: the next-longest pause is close in length, so check the scene changes by ear, or use Tap to sync.':' These are pause-based estimates; check the scene changes against the words.'));
+}
+$('vo').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f)return;
+  env=null;autoOn=false;audioDur=0;['auto','tap','fit'].forEach(k=>$(k).disabled=true);
+  status('Reading the narration…');
+  vo.src=URL.createObjectURL(f);
+  vo.onloadedmetadata=async()=>{
+    audioDur=vo.duration;
+    try{await decode(f)}catch(err){env=null}
+    $('fit').disabled=false;$('tap').disabled=false;$('auto').disabled=!env;
+    if(env)autoTime();else status(`Loaded ${audioDur.toFixed(1)} s. Pause analysis is not available here, so use Tap to sync or Fit by word count.`);
+  };
+  vo.onerror=()=>{audioDur=0;status('That file could not be played. Try an MP3 or WAV.')};
+});
+$('auto').onclick=autoTime;
+['sens','mingap'].forEach(id=>$(id).addEventListener('input',()=>{$(id+'v').textContent=id==='sens'?$(id).value+' dB':(+$(id).value).toFixed(2)+' s'}));
+['sens','mingap'].forEach(id=>$(id).addEventListener('change',()=>{if(env)autoTime()}));
+$('fit').onclick=()=>{
+  if(!audioDur)return;
+  const sw=ord.reduce((a,i)=>a+BEATS[i].words,0);
+  ord.forEach((i,n)=>{D[i]=+(audioDur*BEATS[i].words/sw+(n===0?LEAD:0)).toFixed(2);SW[i]=null});
+  buildPanel();afterDurChange();status(`Scenes spread over ${audioDur.toFixed(1)} s by word count. This ignores real pauses, so Auto-time or Tap to sync lets you mark the actual transitions.`);
+};
+/* tap to sync */
+let tap=null;
+function tapMsg(){$('tapmsg').textContent=`Tap when scene ${ord[tap.length+1]+1} begins (key T or Enter).`}
+function tapStart(){
+  if(!audioDur){status('Load the narration file first.');return}
+  stop(false);tap=[];$('tapbox').hidden=false;tapMsg();
+  vo.currentTime=0;vo.muted=false;vo.play().catch(()=>{});
+}
+function tapEnd(){tap=null;$('tapbox').hidden=true;vo.pause();vo.muted=!voiceOn}
+function tapNow(){
+  if(!tap)return;
+  tap.push(Math.max(0,vo.currentTime-.35));
+  if(tap.length>=ord.length-1){const b=tap.slice();tapEnd();applyBounds(b,null);status(`Scene changes set from ${b.length} taps (each placed 0.35 s early to cover reaction time). Scrub the timeline to check, and nudge lengths under Scene lengths.`)}
+  else tapMsg();
+}
+$('tap').onclick=tapStart;$('tapnow').onclick=tapNow;$('tapcancel').onclick=()=>{tapEnd();status('Tap to sync cancelled.')};
+document.addEventListener('keydown',e=>{
+  if(tap&&(e.key==='t'||e.key==='T'||e.key==='Enter'||e.code==='Space')){e.preventDefault();tapNow();return}
+  if(e.target.tagName==='INPUT'&&e.target.type!=='range')return;
+  if(e.code==='Space'){e.preventDefault();playing?stop(false):play()}
+  else if(e.key==='r'||e.key==='R'){seekTo(0);play()}
+  else if(e.key==='Escape'&&recMode)exitRec();
+});
+
+/* ---------- start ---------- */
+async function init(){
+  load();makeGrain();build();
+  scenes[LAST].setTag($('tag').value);
+  $('inc7').checked=inc7;
+  $('capt').setAttribute('aria-pressed',capsOn);$('capt').textContent=capsOn?'Captions on':'Captions off';
+  recalc();buildPanel();$('seek').max=total;$('total').textContent='/ '+fmt(total);
+  render(POSTER);
+  window.__ai={render:t=>{playing=false;render(t)},total:()=>total,starts:()=>ord.map(i=>starts[i]),cu:(i,j)=>cu(i,j),setInc7:v=>{inc7=v;recalc()},D:()=>D.slice(),ord:()=>ord.slice(),bounds:applyBounds};
+}
+const fontsDone=Promise.race([
+  Promise.all([document.fonts.load('800 80px "Egypt Paper Sans"'),document.fonts.load('400 40px "Egypt Paper Sans"')]).then(()=>document.fonts.ready),
+  new Promise(r=>setTimeout(r,2500))
+]);
+fontsDone.then(init);
+})();
+</script>
+
+</body></html>

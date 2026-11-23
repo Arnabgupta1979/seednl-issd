@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where will the seed come from? Farmer seed-choice activity</title>
+<meta name="description" content="Pilot activity for review. Choose seed routes for three fictional farmers and see how different routes meet different needs.">
+<style>
+:root{
+  --paper:#fbf5e6; --card:#fffdf6; --ink:#27281f; --muted:#55543f; --line:#c9bb96;
+  --moss:#34502b; --moss-bg:#e3eed8; --ochre:#7a5600; --ochre-bg:#f8e9c0;
+  --clay:#8f3a24; --clay-bg:#f6dccf; --slate:#42464f; --slate-bg:#e6e7ea;
+  --focus:#1b4f8f; --shadow:#d8c9a2;
+}
+*{box-sizing:border-box}
+html{font-size:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Segoe UI",system-ui,sans-serif;line-height:1.5;font-size:1.0625rem}
+h1,h2,h3{line-height:1.25;margin:0 0 .5rem;font-family:"Segoe UI",system-ui,sans-serif}
+h1{font-size:1.75rem} h2{font-size:1.3rem;margin-top:1.6rem} h3{font-size:1.1rem}
+p{margin:.4rem 0 .8rem}
+.wrap{max-width:62rem;margin:0 auto;padding:0 1rem}
+.sr,.skip:not(:focus){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip:focus{position:static;padding:.5rem 1rem;background:#fff;display:block}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+main:focus,h1:focus{outline:none}
+h1:focus-visible{outline:3px solid var(--focus)}
+.top{background:var(--moss);color:#fff;padding:.7rem 0}
+.top .kicker{margin:0;font:.8rem "Segoe UI",system-ui,sans-serif;opacity:.95}
+.top .brand{margin:0;font:700 1.25rem "Segoe UI",system-ui,sans-serif}
+.steps{list-style:none;display:flex;flex-wrap:wrap;gap:.35rem;padding:0;margin:.8rem 0}
+.steps li{margin:0}
+.steps button{font:.85rem "Segoe UI",system-ui,sans-serif;border:2px solid var(--line);background:var(--card);color:var(--ink);padding:.3rem .6rem;border-radius:999px;cursor:pointer}
+.steps button[aria-current="step"]{border-color:var(--moss);background:var(--moss);color:#fff;font-weight:700}
+.steps button:disabled{opacity:.55;cursor:not-allowed}
+.card{background:var(--card);border:2px solid var(--line);border-radius:.6rem;padding:1rem 1.1rem;box-shadow:4px 4px 0 var(--shadow);margin:0 0 1rem}
+.card.chosen{border-color:var(--moss);box-shadow:4px 4px 0 #a9c49a}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))}
+.btn{font:600 1rem "Segoe UI",system-ui,sans-serif;padding:.55rem 1rem;border-radius:.45rem;border:2px solid var(--moss);background:var(--moss);color:#fff;cursor:pointer;min-height:2.75rem}
+.btn.alt{background:var(--card);color:var(--moss)}
+.btn.link{background:none;border:none;color:var(--focus);text-decoration:underline;min-height:0;padding:.25rem .4rem;font-weight:500}
+.btn[aria-pressed="true"]{background:var(--ochre-bg);color:var(--ink);border-color:var(--ochre)}
+.btn[aria-pressed="true"]::before{content:"✓ "}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.small{font-size:.875rem;color:var(--muted)}
+.tag{display:inline-block;font:.8rem "Segoe UI",system-ui,sans-serif;padding:.1rem .5rem;border-radius:.3rem;background:var(--slate-bg);color:var(--slate);border:1px solid var(--line)}
+.fiction{background:var(--ochre-bg);border:2px dashed var(--ochre);padding:.5rem .8rem;border-radius:.4rem;font-size:.95rem}
+.lvl{display:inline-flex;gap:.3rem;align-items:baseline;font:600 .85rem "Segoe UI",system-ui,sans-serif;padding:.1rem .45rem;border-radius:.3rem;border:1px solid transparent;white-space:nowrap}
+.lvl-g{background:var(--moss-bg);color:var(--moss);border-color:#9bbb8a}
+.lvl-p{background:var(--ochre-bg);color:var(--ochre);border-color:#d6b25a}
+.lvl-w{background:var(--clay-bg);color:var(--clay);border-color:#d99b84}
+.lvl-u{background:var(--slate-bg);color:var(--slate);border-color:#b4b7bf}
+.tablewrap{overflow-x:auto;margin:.5rem 0 1rem;border:1px solid var(--line);border-radius:.4rem;background:var(--card)}
+table{border-collapse:collapse;width:100%;font:.92rem "Segoe UI",system-ui,sans-serif}
+th,td{border:1px solid var(--line);padding:.4rem .55rem;text-align:left;vertical-align:top}
+thead th{background:#efe5c8}
+tbody th{background:#f6efd9;font-weight:600}
+td.win,th.win{background:#fff3c4;box-shadow:inset 0 0 0 2px var(--ochre)}
+caption{text-align:left;padding:.4rem .55rem;font-weight:600}
+.cellnote{display:block;font-size:.82rem;color:var(--muted);margin-top:.15rem}
+ul.clean{margin:.3rem 0 .8rem;padding-left:1.2rem}
+.planbar{position:sticky;bottom:0;background:#efe5c8;border-top:3px solid var(--moss);padding:.6rem 1rem;margin:1rem -1rem 0;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between}
+.fac{border:2px solid var(--focus);border-radius:.5rem;background:#eaf1fa;padding:.5rem .9rem;margin:.8rem 0}
+.fac summary{font-weight:700;cursor:pointer}
+fieldset{border:2px solid var(--line);border-radius:.5rem;padding:.7rem 1rem;margin:0 0 1rem;background:var(--card)}
+legend{font-weight:700;padding:0 .4rem}
+label.opt{display:flex;gap:.6rem;align-items:flex-start;padding:.5rem;border-radius:.4rem;cursor:pointer}
+label.opt:hover{background:#f3ead0}
+input[type=radio],input[type=checkbox]{width:1.2rem;height:1.2rem;margin-top:.2rem;accent-color:var(--moss)}
+textarea{width:100%;min-height:9rem;font:.9rem Consolas,monospace;padding:.5rem;border:2px solid var(--line);border-radius:.4rem;background:#fff;color:var(--ink)}
+.foot{padding:1.5rem 1rem 2rem;border-top:1px solid var(--line);margin-top:2rem}
+.farmer-pick{display:flex;flex-direction:column;gap:.4rem}
+.farmer-pick .btn{align-self:flex-start}
+@media (max-width:40rem){h1{font-size:1.45rem}.planbar{margin:1rem -1rem 0}}
+@media (prefers-reduced-motion:no-preference){.card{transition:box-shadow .15s,border-color .15s}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media (forced-colors:active){.lvl{border:1px solid CanvasText}.btn[aria-pressed="true"]{outline:2px solid Highlight}}
+@media print{.steps,.foot,.planbar,.btn{display:none}.card{box-shadow:none}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#app">Skip to the activity</a>
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">Pilot for review · Proposed Module 1 · All farmers are fictional</p>
+    <p class="brand">Where will the seed come from?</p>
+  </div>
+</header>
+<nav class="wrap" aria-label="Activity steps"><ol id="steps" class="steps"></ol></nav>
+<main id="app" class="wrap" tabindex="-1">
+  <noscript><p>This activity needs JavaScript. It runs locally in your browser and sends no data anywhere.</p></noscript>
+</main>
+<div id="status" class="sr" role="status" aria-live="polite"></div>
+<footer class="wrap foot">
+  <button type="button" class="btn link" id="btn-about">About, rubric and sources</button>
+  <button type="button" class="btn link" id="btn-fac" aria-pressed="false">Facilitator notes</button>
+  <button type="button" class="btn link" id="btn-reset">Reset everything</button>
+  <p class="small">Offline, static page. No account, no tracking, no live AI. Nothing is saved unless you tick the box on the first screen.</p>
+</footer>
+<script>
+/* G01 "Where will the seed come from?" scenario data.
+ * EDIT THIS FILE to change farmers, routes, wording or ratings. No other file holds content.
+ *
+ * Provenance: every farmer, place and rating below is FICTIONAL and SYNTHETIC. They were written
+ * for teaching and do not describe a real person, village, cooperative, shop or programme.
+ * Ratings are qualitative judgements by the pilot author, not measured data and not probabilities.
+ * They must be reviewed by a seed-systems expert before any release (see docs/Source_register.md).
+ *
+ * Rating codes used in `assess`:  g = meets the need   p = partly meets   w = does not meet well   u = not known
+ * Stress codes:  holds | strained | exposed | depends
+ */
+window.G01_DATA = {
+  meta: {
+    title: 'Where will the seed come from?',
+    subtitle: 'A farmer seed-choice activity',
+    version: '0.1 pilot for review',
+    status: 'Proposed pilot. Not approved course content. All farmers and places are fictional.',
+    module: 'Proposed Module 1: Why an integrated approach matters (V2.0 concept note)'
+  },
+
+  /* The eight sector functions, in V2.0 concept note order. */
+  functions: [
+    { id: 'production', name: 'Production', note: 'Who makes the seed' },
+    { id: 'distribution', name: 'Value addition and distribution', note: 'How seed is processed, packed and reaches farmers' },
+    { id: 'service', name: 'Service provision', note: 'Advice, testing, inspection, information' },
+    { id: 'utilisation', name: 'Utilisation', note: 'How farmers choose, store and sow seed' },
+    { id: 'organisation', name: 'Stakeholder organisation', note: 'Groups, associations, networks' },
+    { id: 'regulation', name: 'Regulation', note: 'Rules on quality, labelling and trade' },
+    { id: 'coordination', name: 'Coordination', note: 'How actors align their work' },
+    { id: 'financing', name: 'Financing', note: 'Who can pay, and when' }
+  ],
+
+  /* Five needs a farmer weighs when choosing a route. */
+  dimensions: [
+    { id: 'timing', label: 'Timing', q: 'Can seed be in hand for the planting window?' },
+    { id: 'cost', label: 'Cash and cost', q: 'Can she pay when payment is due?' },
+    { id: 'fit', label: 'Fit to crop and wishes', q: 'Does the variety suit her land, rain risk, market and taste?' },
+    { id: 'quality', label: 'Quality information', q: 'Does she know the seed is true to type and will germinate?' },
+    { id: 'reach', label: 'Reach and quantity', q: 'Can she reach it with her time and travel, and get enough?' }
+  ],
+
+  levels: {
+    g: { label: 'Meets the need', sym: '●', css: 'g' },
+    p: { label: 'Partly meets', sym: '◐', css: 'p' },
+    w: { label: 'Does not meet well', sym: '○', css: 'w' },
+    u: { label: 'Not known', sym: '?', css: 'u' }
+  },
+  importanceLabel: { high: 'Matters most', medium: 'Matters', low: 'Matters less' },
+
+  stressLevels: {
+    holds: { label: 'Holds up', sym: '●' },
+    strained: { label: 'Under strain', sym: '◐' },
+    exposed: { label: 'Exposed', sym: '○' },
+    depends: { label: 'Depends: ask', sym: '?' }
+  },
+
+  /* Five routes. `functions` lists the sector functions the route leans on (simplified; to verify). */
+  sources: [
+    { id: 'saved', name: 'Saved seed', tagline: 'Seed kept from your own last harvest.',
+      can: 'Close at hand, little or no cash, and the variety is known to you.',
+      watch: 'Quality may be unknown. Hybrids do not repeat their performance. Stored seed can lose vigour or carry pests and disease.',
+      check: 'How was it stored? Is there enough? Is the crop a hybrid?',
+      functions: ['utilisation', 'production'],
+      functionNote: 'The farmer is producer and user. Utilisation (selection and storage) carries the weight. Service provision may be missing.' },
+    { id: 'neighbours', name: 'Neighbours and kin', tagline: 'Seed shared, swapped or lent by other farmers and relatives.',
+      can: 'Trusted, locally tested varieties, often without cash. A way to try something new.',
+      watch: 'Quality is not checked. It depends on relationships and on others having a surplus when you need it.',
+      check: 'Where did they get it? How did it do in a bad season?',
+      functions: ['utilisation', 'organisation', 'production'],
+      functionNote: 'Social networks and informal organisation do the work. Few formal services are involved.' },
+    { id: 'market', name: 'Local market', tagline: 'Seed or grain bought from stalls, traders or local markets.',
+      can: 'Available when you are ready, in small amounts, even late.',
+      watch: 'Often unlabelled. It may be grain rather than seed. Origin and variety may be unclear. Cash and transport are needed.',
+      check: 'Can the seller say where it came from? Can you test a handful first?',
+      functions: ['distribution', 'financing'],
+      functionNote: 'Traders and stall holders do the distribution. Cash sales set the terms. Quality rules may be weak or not applied.' },
+    { id: 'coop', name: 'Cooperative or community seed', tagline: 'Seed multiplied, checked and shared by a cooperative, farmer group or community seed bank.',
+      can: 'Information and checks that members know. Varieties suited to the area. Sometimes seed loans or later payment.',
+      watch: 'May not stock every crop or variety. Pre-order dates and deposits. Quality checks vary between groups.',
+      check: 'What checks are done? When do orders close? Can you pay later or in kind?',
+      functions: ['production', 'organisation', 'service', 'coordination', 'financing'],
+      functionNote: 'Members produce and organise. The group provides checks and information, coordinates orders and sometimes lends seed.' },
+    { id: 'company', name: 'Seed company', tagline: 'Packaged seed sold by a seed company or its agro-dealer.',
+      can: 'Labelled, tested seed with variety information. Wide choice for some crops.',
+      watch: 'Cash up front and travel to the dealer. Possible old or fake stock. Fit to local conditions may be uncertain.',
+      check: 'Is the seal intact? Check the label and date. What does the variety need (rain, inputs)?',
+      functions: ['production', 'distribution', 'service', 'regulation', 'financing'],
+      functionNote: 'Companies produce and distribute. Labelling and registration rules apply. Advice depends on the dealer. Cash timing matters.' }
+  ],
+
+  /* Generic stress-test results per route. Farmers add their own note below. */
+  disruptions: [
+    { id: 'rainLate', label: 'Rains start late', text: 'The rains arrive later than expected and the planting window shifts.' },
+    { id: 'cashShort', label: 'Cash runs short', text: 'Cash is short on the day seed must be paid for.' },
+    { id: 'badBatch', label: 'Poor seed batch', text: 'The seed germinates poorly or turns out not to be the variety expected.' },
+    { id: 'noVariety', label: 'Variety not available', text: 'The variety she wanted is not available this season.' }
+  ],
+  stress: {
+    rainLate: {
+      saved: ['holds', 'Seed is already in hand, so she can wait for the rains. Old seed may have lost vigour.'],
+      neighbours: ['strained', 'Neighbours plant when she does, so spare seed may run short if the first planting fails.'],
+      market: ['holds', 'Stalls keep selling, so replanting is possible at the going price.'],
+      coop: ['depends', 'Orders may be fixed in advance. Ask whether late or extra seed is held.'],
+      company: ['holds', 'Stock is on the shelf when she is ready, but a second purchase costs cash again.']
+    },
+    cashShort: {
+      saved: ['holds', 'No cash is needed.'],
+      neighbours: ['holds', 'Swaps and favours often work without cash, if she has something to give back.'],
+      market: ['exposed', 'Needs cash on the day, plus transport.'],
+      coop: ['depends', 'Some groups accept payment in kind or after harvest. Others need a deposit.'],
+      company: ['exposed', 'Usually cash up front.']
+    },
+    badBatch: {
+      saved: ['exposed', 'There is no second source of the same seed unless she turns to another route.'],
+      neighbours: ['strained', 'She can ask again, but the same neighbours may share the same problem.'],
+      market: ['strained', 'She can buy again, with the same doubts about origin.'],
+      coop: ['depends', 'Records may let the group trace and replace a bad lot. Ask what is promised.'],
+      company: ['depends', 'A sealed, dated lot can be traced. What the dealer does about a failed lot varies.']
+    },
+    noVariety: {
+      saved: ['strained', 'She can only plant what she kept. Nothing new.'],
+      neighbours: ['strained', 'She is limited to what neighbours have, though they may share something new.'],
+      market: ['strained', 'Whatever is on the stall, and the variety may be unknown.'],
+      coop: ['depends', 'The group may offer a different variety, or none.'],
+      company: ['strained', 'Other varieties are on the shelf but may need different rain, inputs or care.']
+    }
+  },
+
+  farmers: [
+    /* ------------------------------------------------------------------ AMINA */
+    { id: 'amina', name: 'Amina', crop: 'Maize', cropNote: 'Rain-fed, small plot, family food first',
+      intro: 'Amina farms a small plot with her family. Maize is the main food crop. A small surplus is sold after harvest.',
+      wants: [
+        'A variety that still matures if the rains stop early',
+        'Seed in hand when the first rains come',
+        'Grain that stores well and tastes right for the family',
+        'No new borrowing'
+      ],
+      resources: [
+        ['Cash', 'Very little until after harvest sales. Lowest just before planting.'],
+        ['Labour', 'Family labour. Planting and weeding are the busiest weeks.'],
+        ['Travel', 'The market town is half a day away by shared transport.'],
+        ['Storage', 'A sack store in the roof. Pests are a worry.'],
+        ['Information', 'Radio, neighbours, an occasional visit from a cooperative officer.']
+      ],
+      importance: { timing: 'high', cost: 'high', fit: 'high', quality: 'medium', reach: 'medium' },
+      stages: ['After harvest', 'Dry months', 'Seed decision window', 'Land preparation', 'Planting window', 'Weeding', 'Flowering and grain fill'],
+      calendar: {
+        Cash: ['Some from sales', 'Falling', 'Tight', 'Tight', 'Tight', 'Tight', 'Tight'],
+        Labour: ['Busy', 'Quiet', 'Quiet', 'Busy', 'Peak', 'Busy', 'Moderate'],
+        'Rain risk': ['None', 'None', 'Forecast unsure', 'None', 'Onset uncertain', 'Dry spells possible', 'Most sensitive'],
+        'Seed on offer': ['Own store filled', 'Cooperative pre-orders open', 'Stalls and shop restock', 'Pre-order deadline passes', 'Market and shop open', 'Nothing new', 'Nothing new']
+      },
+      decisionStage: 2,
+      assess: {
+        saved: { timing: ['g', 'In her store now.'], cost: ['g', 'No cash needed.'], fit: ['p', 'A variety she knows, but not early maturing.'], quality: ['u', 'Germination not tested. Pests in the store?'], reach: ['p', 'At home, but is there enough for the plot?'] },
+        neighbours: { timing: ['g', 'She can ask now, before they plant.'], cost: ['g', 'A favour or a small swap.'], fit: ['g', 'An early-maturing variety that came through a short season.'], quality: ['u', 'Trust, not testing.'], reach: ['p', 'Walking distance, but enough for part of the plot only.'] },
+        market: { timing: ['g', 'Open when she is ready. She can replant.'], cost: ['p', 'Cash now, plus transport.'], fit: ['u', 'Mixed maize. Variety unknown.'], quality: ['w', 'Cannot check origin. It may be grain, not seed.'], reach: ['p', 'Half a day each way. Any amount.'] },
+        coop: { timing: ['p', 'Pre-orders close during the lean months.'], cost: ['p', 'Deposit or cash up front. Terms not known.'], fit: ['g', 'Offers an early-maturing variety suited to the area.'], quality: ['g', 'Members check the seed. She can ask how.'], reach: ['g', 'In her sub-county. An amount can be reserved.'] },
+        company: { timing: ['g', 'Stocked before planting.'], cost: ['w', 'The most cash up front, when her cash is lowest.'], fit: ['p', 'High-potential hybrids that may need better rain and fertiliser to pay back. Fresh seed each year.'], quality: ['g', 'Labelled and tested.'], reach: ['p', 'Half a day to town. Any amount.'] }
+      },
+      story: {
+        saved: ['Amina kept maize from last season in a sack in the roof store. It has been there for months. It is the variety she has always grown.', 'Is there enough, and does a handful of seeds sprout in damp cloth?'],
+        neighbours: ['A neighbour planted an early-maturing maize variety last season and still harvested when the rains stopped early. She has seed to spare for part of Amina’s plot.', 'Where did the neighbour get the variety, and how did it do in a normal year?'],
+        market: ['Stalls in the market town sell maize by the cup. Some is clearly seed, some is grain. The seller is unsure of the variety. It takes half a day to get there and back.', 'Can the seller say where it came from? Can she test a handful first?'],
+        coop: ['A cooperative in her sub-county grows and checks an early-maturing maize variety with its members. Orders close before land preparation and need a deposit.', 'What checks are done, and can the deposit be paid in kind or after harvest?'],
+        company: ['The agro-dealer in town sells sealed packets of hybrid maize seed with the variety and date on the label. It costs the most cash up front, and her cash is at its lowest now.', 'What rainfall and inputs does this hybrid need to pay off, and could she afford it every year?']
+      },
+      stressNote: {
+        rainLate: 'A late start squeezes the season, and flowering is the most rain-sensitive stage. Earlier maturity matters more than seed price.',
+        cashShort: 'She is already near her limit. Deposits and travel add to the cash she needs.',
+        badBatch: 'Poor germination means replanting after weeks are lost. A quick, low-cost second source matters.',
+        noVariety: 'If the early variety is not available, she must choose between her old variety and one she does not know.'
+      },
+      wholeNote: 'No route meets all of Amina’s needs. Mixing routes, for example a neighbour’s early variety with a back-up from the cooperative, covers more than any single route.'
+    },
+
+    /* ----------------------------------------------------------------- JOSEPH */
+    { id: 'joseph', name: 'Joseph', crop: 'Tomato', cropNote: 'Small irrigated plot, sold fresh to traders',
+      intro: 'Joseph grows tomatoes on a small irrigated plot near a road. He raises seedlings in a nursery, transplants them, and sells fresh fruit to traders and the local market.',
+      wants: [
+        'Uniform, firm fruit that travels well',
+        'Tolerance to the diseases that cost him a crop before',
+        'Seed that germinates well in the nursery',
+        'Seed in hand on nursery sowing day'
+      ],
+      resources: [
+        ['Cash', 'Some from last sales, but not much to spare. A failed nursery would hurt.'],
+        ['Labour', 'He and one helper. Nursery and transplanting are the busy weeks.'],
+        ['Travel', 'A town with an agro-dealer is an hour away by road.'],
+        ['Storage', 'None for the crop. Tomatoes are sold fresh.'],
+        ['Information', 'A smartphone and a messaging group with other growers.']
+      ],
+      importance: { timing: 'medium', cost: 'medium', fit: 'high', quality: 'high', reach: 'low' },
+      stages: ['Plan the crop', 'Seed decision window', 'Nursery', 'Transplanting', 'Growing and spraying', 'Harvest and selling'],
+      calendar: {
+        Cash: ['Some in hand', 'Some in hand', 'Tight', 'Tight', 'Tight', 'Sales come in'],
+        Labour: ['Quiet', 'Quiet', 'Busy', 'Peak', 'Busy', 'Peak'],
+        'Water and weather risk': ['Check water supply', 'Check water supply', 'Heat and disease risk', 'Heat and disease risk', 'Disease pressure', 'Price dips when many sell'],
+        'Seed on offer': ['Group order opens', 'Shop restocks. Group order closes', 'Nothing new', 'Seedlings only', 'Nothing new', 'Own fruit, if any seed is saved']
+      },
+      decisionStage: 1,
+      assess: {
+        saved: { timing: ['g', 'In his box now.'], cost: ['g', 'No cash needed.'], fit: ['w', 'His variety is a hybrid. Saved seed will not repeat it.'], quality: ['w', 'Seed-borne disease can carry over.'], reach: ['p', 'Only what the last crop gave.'] },
+        neighbours: { timing: ['g', 'Another grower will share.'], cost: ['g', 'A swap or small gift.'], fit: ['u', 'A different variety, untested for his market.'], quality: ['u', 'Not tested.'], reach: ['g', 'A small amount is enough for a nursery.'] },
+        market: { timing: ['g', 'On his weekly trip.'], cost: ['p', 'A small cash outlay.'], fit: ['u', 'Loose seed. Variety unclear.'], quality: ['w', 'Unlabelled. Germination unknown.'], reach: ['g', 'Right there at the market.'] },
+        coop: { timing: ['p', 'The group order closes before nursery sowing.'], cost: ['g', 'A joint order may lower the price per packet.'], fit: ['p', 'A limited range chosen by the group.'], quality: ['g', 'The group checks seals and lot labels.'], reach: ['g', 'A collection point in the district.'] },
+        company: { timing: ['g', 'The dealer restocks before nursery sowing.'], cost: ['p', 'Cash is needed, and he has some from last sales.'], fit: ['g', 'Several varieties, with disease tolerances listed.'], quality: ['g', 'Labelled, sealed and dated.'], reach: ['p', 'An hour’s trip. Any amount.'] }
+      },
+      story: {
+        saved: ['Joseph kept seed from last season’s tomatoes, which were a hybrid. The plants will not match their parent, and seed-borne disease can pass on.', 'Was the variety a hybrid? Did the plants show disease last season?'],
+        neighbours: ['Another grower in his messaging group offers seed of a variety she likes. It has not been grown on his soil or sold to his traders.', 'How did the fruit look after transport, and what disease problems did she have?'],
+        market: ['A stall at the weekly market sells loose tomato seed in small paper twists. It is cheap and available today, with no label and no germination date.', 'Is there any way to check germination before he sows the whole nursery?'],
+        coop: ['His district growers’ group places one joint order each season and shares what each variety did. The order closes a few weeks before he usually sows the nursery.', 'When does the order close, and what happens if a lot fails?'],
+        company: ['The agro-dealer an hour away stocks several sealed tomato hybrids with disease tolerances and germination dates on the label. Joseph has some cash from last sales.', 'Is the seal intact, is the lot number recorded, and what does the dealer do if germination is poor?']
+      },
+      stressNote: {
+        rainLate: 'He irrigates, so late rains matter less. Water supply and nursery timing matter more.',
+        cashShort: 'A poor price at the last sale leaves little cash. A joint order or smaller packets can help.',
+        badBatch: 'A failed nursery costs weeks and money. He needs a lot record and a way to be put right.',
+        noVariety: 'If a preferred hybrid sells out, he must pick another and test it on a small bed first.'
+      },
+      wholeNote: 'For Joseph a company or a growers’ group may fit well, because quality information and fit matter most. That does not make them the answer for Amina or Neema.'
+    },
+
+    /* ------------------------------------------------------------------ NEEMA */
+    { id: 'neema', name: 'Neema', crop: 'Beans', cropNote: 'Several local varieties, mixed with other crops, food and small local sales',
+      intro: 'Neema grows several local bean varieties for the family’s food and a little local selling. She is part of a women’s farmers’ group. A community seed bank is within walking distance.',
+      wants: [
+        'Keep the bean varieties that taste right and cook fast',
+        'Seed without paying cash',
+        'Try one variety that does better in dry spells',
+        'Enough seed for the whole plot'
+      ],
+      resources: [
+        ['Cash', 'Almost none outside harvest time. She saves a little with her group.'],
+        ['Labour', 'Herself and her daughter. Planting is by hand.'],
+        ['Travel', 'The seed bank is half an hour’s walk. The shop in town is a day’s round trip.'],
+        ['Storage', 'Clay pots with ash. Weevils are a risk.'],
+        ['Information', 'Her women’s group and the seed bank’s records.']
+      ],
+      importance: { timing: 'medium', cost: 'high', fit: 'high', quality: 'medium', reach: 'medium' },
+      stages: ['After harvest', 'Dry months', 'Seed decision window', 'Planting window', 'Weeding', 'Pod fill and harvest'],
+      calendar: {
+        Cash: ['A little', 'Falling', 'Almost none', 'Almost none', 'Almost none', 'Almost none'],
+        Labour: ['Busy', 'Quiet', 'Quiet', 'Peak', 'Busy', 'Busy'],
+        'Rain risk': ['None', 'None', 'Forecast unsure', 'Onset uncertain', 'Dry spells possible', 'Sensitive'],
+        'Seed on offer': ['Own pots filled', 'Seed bank lists varieties', 'Group swaps. Seed bank opens', 'Seed bank open on set days', 'Nothing new', 'Nothing new']
+      },
+      decisionStage: 2,
+      assess: {
+        saved: { timing: ['g', 'In her pots.'], cost: ['g', 'No cash needed.'], fit: ['g', 'Her own varieties, with the taste and cooking time she likes.'], quality: ['p', 'Weevils are a risk. She checks by eye.'], reach: ['p', 'Last season’s harvest was small.'] },
+        neighbours: { timing: ['g', 'Swaps with women in her group.'], cost: ['g', 'Seed for seed.'], fit: ['g', 'A chance to try a variety that did better in dry spells.'], quality: ['p', 'She has seen it growing in the field.'], reach: ['g', 'Nearby. Small amounts.'] },
+        market: { timing: ['g', 'Open when she is ready.'], cost: ['p', 'Needs cash she does not have.'], fit: ['u', 'Sold as food. Variety unknown.'], quality: ['w', 'May be old or may not sprout.'], reach: ['g', 'Close, in any amount.'] },
+        coop: { timing: ['p', 'Open on set days before planting.'], cost: ['g', 'A seed loan. She returns seed after harvest.'], fit: ['g', 'Holds several local bean varieties.'], quality: ['p', 'Community records. Checks vary.'], reach: ['p', 'Half an hour’s walk. Share limited per member.'] },
+        company: { timing: ['p', 'Only in town.'], cost: ['w', 'Cash she does not have.'], fit: ['p', 'A few improved bean varieties, not her local taste varieties.'], quality: ['g', 'Labelled and tested.'], reach: ['w', 'A day’s trip for a small packet.'] }
+      },
+      story: {
+        saved: ['Neema keeps her bean seed in a clay pot with ash. Her varieties cook fast and taste right. Last season’s harvest was small.', 'Has she checked for weevil damage, and is there enough for the whole plot?'],
+        neighbours: ['Women in her farmers’ group swap beans before planting. One variety did better in dry spells last year.', 'What did that variety need, and does it taste right?'],
+        market: ['Beans in the market are sold for eating. Some may sprout, some will not, and the variety is unknown.', 'Does a handful sprout, and is it worth cash she does not have?'],
+        coop: ['The community seed bank lends bean seed from several local varieties on set days. Borrowers return seed after harvest. The share per member is limited.', 'Which varieties are listed, and what are the repayment terms if the harvest fails?'],
+        company: ['A shop in the market town sells packets of improved bush beans. It is a day’s round trip and the cash price is out of reach this month.', 'Would this variety taste and cook like hers?']
+      },
+      stressNote: {
+        rainLate: 'Beans can be a shorter-cycle crop, so a later start may still be workable. The seed in her pots can wait for the rains.',
+        cashShort: 'She has almost no cash. Seed-for-seed swaps and a seed loan keep her planting.',
+        badBatch: 'Weevil-damaged seed may fail. Swapping again or borrowing from the seed bank gives a second chance.',
+        noVariety: 'Several local varieties are in circulation, so losing one is less serious than it would be with a single variety.'
+      },
+      wholeNote: 'For Neema, routes based on seed sharing and community seed fit more of her needs than a shop does. A shop route is not wrong, but it asks for cash and a long trip.'
+    }
+  ],
+
+  /* Reflection prompts shown in the debrief. */
+  prompts: [
+    'Which need drove your first choice? Did a different farmer change your answer?',
+    'Which route did you rank last? Under what circumstances might it be the best one?',
+    'Which sector functions did your plan depend on? Which were weak or hard to see?',
+    'Whose voice is missing from this story (for example women who keep seed, young farmers, seed sellers, extension staff)? What would they tell you?',
+    'If you were a programme manager, would you strengthen a route, connect two routes, or leave a route alone? Why?'
+  ],
+
+  /* Facilitator note shown in the app (short). Long version: docs/Facilitator_note.md */
+  facilitator: {
+    purpose: 'Help participants see that farmers use several seed routes, that each route meets some needs and misses others, and that the right answer changes with the farmer, the crop and the season.',
+    time: 'About 15 to 20 minutes per farmer. Two farmers in 40 minutes with a short debrief works well.',
+    flow: [
+      'Ask participants to guess the best route before they open the game. Keep their guesses visible.',
+      'Run one farmer individually or in pairs. Ask them to say aloud what matters most to the farmer before choosing.',
+      'Run a second farmer. Compare plans across farmers in the debrief table.',
+      'Use the eight sector functions to ask which parts of the sector the plan depends on.'
+    ],
+    watchFor: [
+      'Participants naming a single “winner” for all three farmers. Ask what changes if the crop or the cash changes.',
+      'Treating certified or company seed as automatically correct, or saved seed as automatically inferior.',
+      'Treating the symbols as a score. They are a conversation aid, not a rating.',
+      'Using these fictional cases as if they were evidence about a real country.'
+    ]
+  }
+};
+
+</script>
+<script>
+/* G01 app logic. Content lives in data.js. No network, no backend, no live AI. */
+(function () {
+  'use strict';
+  var D = window.G01_DATA;
+  var KEY = 'g01-seed-choices-v1';
+  var ORDER = ['start', 'meet', 'routes', 'stress', 'report', 'debrief'];
+  var LABEL = { start: '1 Choose farmer', meet: '2 Meet the farmer', routes: '3 Routes and plan', stress: '4 Stress test', report: '5 Fit report', debrief: '6 Debrief' };
+  var $app = document.getElementById('app');
+  var $status = document.getElementById('status');
+  var $steps = document.getElementById('steps');
+  var params = new URLSearchParams(location.search);
+  var state = { screen: 'start', farmerId: null, plans: {}, facilitator: params.get('facilitator') === '1', remember: false };
+
+  /* ---------- helpers ---------- */
+  function add(el, c) {
+    if (c == null || c === false) return;
+    if (Array.isArray(c)) { c.forEach(function (x) { add(el, x); }); }
+    else if (c.nodeType) { el.appendChild(c); }
+    else { el.appendChild(document.createTextNode(String(c))); }
+  }
+  function h(tag, props) {
+    var el = document.createElement(tag);
+    props = props || {};
+    Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v == null || v === false) return;
+      if (k === 'class') el.className = v;
+      else if (k.slice(0, 2) === 'on') el.addEventListener(k.slice(2), v);
+      else if (v === true) el.setAttribute(k, '');
+      else el.setAttribute(k, v);
+    });
+    for (var i = 2; i < arguments.length; i++) add(el, arguments[i]);
+    return el;
+  }
+  function byId(list, id) { return list.filter(function (x) { return x.id === id; })[0]; }
+  function farmer() { return byId(D.farmers, state.farmerId); }
+  function plan() { return state.plans[state.farmerId]; }
+  function src(id) { return byId(D.sources, id); }
+  function chosen() { var p = plan(); return [p.main, p.backup].filter(Boolean); }
+  function announce(msg) { $status.textContent = ''; setTimeout(function () { $status.textContent = msg; }, 30); }
+  function lvl(code) {
+    var l = D.levels[code];
+    return h('span', { class: 'lvl lvl-' + code }, h('span', { 'aria-hidden': 'true' }, l.sym), l.label);
+  }
+  function stressBadge(code) {
+    var l = D.stressLevels[code];
+    return h('span', { class: 'lvl lvl-' + ({ holds: 'g', strained: 'p', exposed: 'w', depends: 'u' })[code] }, h('span', { 'aria-hidden': 'true' }, l.sym), l.label);
+  }
+  function list(items) { return h('ul', { class: 'clean' }, items.map(function (t) { return h('li', null, t); })); }
+  function tableWrap(label, table) { return h('div', { class: 'tablewrap', role: 'region', 'aria-label': label, tabindex: '0' }, table); }
+
+  /* ---------- optional storage (opt-in, try/catch) ---------- */
+  function save() {
+    try {
+      if (state.remember) localStorage.setItem(KEY, JSON.stringify({ remember: true, plans: state.plans }));
+      else localStorage.removeItem(KEY);
+    } catch (e) { /* storage blocked: the activity still works */ }
+  }
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return;
+      var o = JSON.parse(raw);
+      if (o && o.remember && o.plans) {
+        state.remember = true;
+        Object.keys(o.plans).forEach(function (id) { if (byId(D.farmers, id)) state.plans[id] = o.plans[id]; });
+      }
+    } catch (e) { /* ignore */ }
+  }
+  function resetAll() {
+    if (!window.confirm('Clear all choices and any saved data on this device?')) return;
+    state.plans = {}; state.farmerId = null; state.remember = false;
+    try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
+    go('start'); announce('Everything was cleared.');
+  }
+
+  /* ---------- navigation ---------- */
+  function reachable(s) {
+    if (s === 'start') return true;
+    if (!state.farmerId) return false;
+    var p = plan();
+    if (s === 'meet' || s === 'routes') return true;
+    if (s === 'stress') return !!p.main;
+    return !!(p.main && p.disruption);
+  }
+  function go(screen) {
+    state.screen = screen;
+    render();
+  }
+  function renderSteps() {
+    $steps.innerHTML = '';
+    ORDER.forEach(function (s) {
+      var b = h('button', { type: 'button', onclick: function () { go(s); } }, LABEL[s]);
+      if (s === state.screen) b.setAttribute('aria-current', 'step');
+      if (!reachable(s)) b.disabled = true;
+      $steps.appendChild(h('li', null, b));
+    });
+  }
+  function facPanel(key) {
+    if (!state.facilitator) return null;
+    var tips = {
+      start: 'Ask for a guess first: "Which seed source is best?" Keep the guesses visible and return to them in the debrief.',
+      meet: 'Ask participants to say aloud what matters most to this farmer before they look at the routes.',
+      routes: 'Listen for "best" language. Ask: best for whom, at what time of year, for which crop?',
+      stress: 'Change the disruption and compare. Does the same plan hold up in all four?',
+      report: 'The symbols are not a score. Ask which gap matters most and who could help close it.',
+      debrief: 'Run the five reflection questions. Use the compare table if two or more farmers were tried.'
+    };
+    var f = D.facilitator;
+    return h('details', { class: 'fac' }, h('summary', null, 'Facilitator note for this screen'),
+      h('p', null, tips[key]),
+      key === 'start' ? [h('p', null, f.purpose), h('p', null, 'Time: ' + f.time), h('p', null, h('strong', null, 'Suggested flow')), list(f.flow), h('p', null, h('strong', null, 'Watch for')), list(f.watchFor)] : null);
+  }
+  function nav(back, next, nextLabel, nextDisabled) {
+    return h('div', { class: 'row' },
+      back ? h('button', { type: 'button', class: 'btn alt', onclick: function () { go(back); } }, 'Back') : null,
+      next ? h('button', { type: 'button', class: 'btn', disabled: nextDisabled, onclick: function () { go(next); } }, nextLabel) : null);
+  }
+  function heading(text) { return h('h1', { tabindex: '-1', id: 'h1' }, text); }
+
+  /* ---------- screens ---------- */
+  function screenStart() {
+    var rem = h('input', { type: 'checkbox', id: 'rem', onchange: function (e) { state.remember = e.target.checked; save(); } });
+    rem.checked = state.remember;
+    return h('div', null,
+      heading('Where will the seed come from?'),
+      h('p', { class: 'fiction' }, 'Three fictional farmers, one decision each season. All names, places and details are invented for teaching and do not describe real people. Choose a farmer, look at what they want and what they have, then plan where their seed will come from.'),
+      h('p', null, 'There is no best seed source and no score. Each source meets some needs and misses others. You will see how your plan fits the farmer, test it against something going wrong, and compare with other farmers.'),
+      facPanel('start'),
+      h('div', { class: 'grid' }, D.farmers.map(function (f) {
+        var tried = state.plans[f.id] && state.plans[f.id].main;
+        return h('div', { class: 'card farmer-pick' },
+          h('h2', { style: 'margin-top:0' }, f.name, ' ', h('span', { class: 'tag' }, f.crop)),
+          h('p', null, f.intro),
+          h('p', { class: 'small' }, f.cropNote + (tried ? ' · you have already planned for ' + f.name : '')),
+          h('button', { type: 'button', class: 'btn', onclick: function () { pickFarmer(f.id); } }, (tried ? 'Open ' : 'Meet ') + f.name));
+      })),
+      h('div', { class: 'card' },
+        h('label', { class: 'opt', for: 'rem' }, rem, h('span', null, 'Remember my choices on this device. Off by default. Only your route choices are stored, no names or personal data. You can reset at any time from the footer.'))));
+  }
+  function pickFarmer(id) {
+    state.farmerId = id;
+    if (!state.plans[id]) state.plans[id] = { main: null, backup: null, disruption: null };
+    save(); go('meet');
+  }
+
+  function screenMeet() {
+    var f = farmer();
+    var tbl = h('table', null,
+      h('caption', null, f.name + '’s season (fictional). The seed decision window is highlighted.'),
+      h('thead', null, h('tr', null, h('th', { scope: 'col' }, 'Season factor'),
+        f.stages.map(function (s, i) { return h('th', { scope: 'col', class: i === f.decisionStage ? 'win' : null }, s, i === f.decisionStage ? h('span', { class: 'cellnote' }, '▶ Seed decision window') : null); }))),
+      h('tbody', null, Object.keys(f.calendar).map(function (row) {
+        return h('tr', null, h('th', { scope: 'row' }, row),
+          f.calendar[row].map(function (c, i) { return h('td', { class: i === f.decisionStage ? 'win' : null }, c); }));
+      })));
+    return h('div', null,
+      heading('Meet ' + f.name),
+      h('p', { class: 'fiction' }, 'Fictional farmer. Details are invented for this activity.'),
+      h('p', null, f.intro),
+      h('div', { class: 'grid' },
+        h('div', { class: 'card' }, h('h2', { style: 'margin-top:0' }, 'Crop'), h('p', null, h('strong', null, f.crop), ' · ' + f.cropNote),
+          h('h2', null, 'What ' + f.name + ' wants from seed'), list(f.wants)),
+        h('div', { class: 'card' }, h('h2', { style: 'margin-top:0' }, 'What ' + f.name + ' has'),
+          h('dl', null, f.resources.map(function (r) { return [h('dt', { style: 'font-weight:700' }, r[0]), h('dd', { style: 'margin:0 0 .4rem 0' }, r[1])]; })))),
+      h('div', { class: 'card' }, h('h2', { style: 'margin-top:0' }, 'What matters most when choosing'),
+        h('ul', { class: 'clean' }, D.dimensions.map(function (d) {
+          return h('li', null, h('strong', null, d.label), ': ' + D.importanceLabel[f.importance[d.id]] + '. ', h('span', { class: 'small' }, d.q));
+        }))),
+      h('h2', null, 'The season'),
+      tableWrap('Seasonal table for ' + f.name, tbl),
+      facPanel('meet'),
+      nav('start', 'routes', 'Explore the routes'));
+  }
+
+  function setRole(role, id) {
+    var p = plan();
+    if (p[role] === id) { p[role] = null; }
+    else {
+      p[role] = id;
+      var other = role === 'main' ? 'backup' : 'main';
+      if (p[other] === id) p[other] = null;
+    }
+    save(); render(true);
+  }
+  function screenRoutes() {
+    var f = farmer(), p = plan();
+    var cards = D.sources.map(function (s) {
+      var st = f.story[s.id];
+      var isMain = p.main === s.id, isBack = p.backup === s.id;
+      return h('div', { class: 'card' + (isMain || isBack ? ' chosen' : ''), id: 'route-' + s.id },
+        h('h2', { style: 'margin-top:0' }, s.name, isMain ? h('span', { class: 'tag' }, ' Main route') : null, isBack ? h('span', { class: 'tag' }, ' Back-up') : null),
+        h('p', { class: 'small' }, s.tagline),
+        h('p', null, h('strong', null, 'For ' + f.name + ': '), st[0]),
+        h('p', null, h('strong', null, 'Ask: '), st[1]),
+        h('details', null, h('summary', null, 'In general, this route'),
+          h('p', null, h('strong', null, 'Can meet: '), s.can), h('p', null, h('strong', null, 'Watch for: '), s.watch), h('p', null, h('strong', null, 'Check: '), s.check),
+          h('p', { class: 'small' }, 'General statements for discussion. To be verified by a seed-systems expert before release.')),
+        h('div', { class: 'row' },
+          h('button', { type: 'button', id: 'bm-' + s.id, class: 'btn alt', 'aria-pressed': isMain ? 'true' : 'false', onclick: function () { setRole('main', s.id); } }, 'Main route' + ': ' + s.name),
+          h('button', { type: 'button', id: 'bb-' + s.id, class: 'btn alt', 'aria-pressed': isBack ? 'true' : 'false', onclick: function () { setRole('backup', s.id); } }, 'Back-up' + ': ' + s.name)));
+    });
+    var bar = h('div', { class: 'planbar' },
+      h('span', null, h('strong', null, 'Your plan for ' + f.name + ': '), 'main = ' + (p.main ? src(p.main).name : 'not chosen yet'), ' · back-up = ' + (p.backup ? src(p.backup).name : 'none (optional)')),
+      h('div', { class: 'row' },
+        h('button', { type: 'button', class: 'btn alt', onclick: function () { go('meet'); } }, 'Back'),
+        h('button', { type: 'button', class: 'btn', disabled: !p.main, onclick: function () { go('stress'); } }, 'Stress-test the plan')));
+    return h('div', null,
+      heading('Routes and plan for ' + f.name),
+      h('p', null, 'Five routes. Read what each could mean for ' + f.name + ', then choose one main route and, if you like, one back-up. Mixing routes is realistic. Choose the button again to undo.'),
+      h('p', { class: 'small' }, f.name + ' wants: ' + f.wants.join('; ') + '.'),
+      facPanel('routes'),
+      h('div', { class: 'grid' }, cards), bar);
+  }
+
+  function screenStress() {
+    var f = farmer(), p = plan();
+    var group = h('fieldset', null, h('legend', null, 'Choose one thing that could go wrong'),
+      D.disruptions.map(function (d) {
+        var r = h('input', { type: 'radio', name: 'dis', value: d.id, id: 'dis-' + d.id, onchange: function () { p.disruption = d.id; save(); render(true); } });
+        if (p.disruption === d.id) r.checked = true;
+        return h('label', { class: 'opt', for: 'dis-' + d.id }, r, h('span', null, h('strong', null, d.label), ': ' + d.text));
+      }));
+    var out = null;
+    if (p.disruption) {
+      var d = byId(D.disruptions, p.disruption), res = D.stress[d.id];
+      out = h('div', null,
+        h('h2', null, 'What happens: ' + d.label),
+        h('p', null, f.stressNote[d.id]),
+        chosen().map(function (id, i) {
+          var r = res[id];
+          return h('div', { class: 'card' }, h('h3', null, (i === 0 ? 'Main: ' : 'Back-up: ') + src(id).name + '  ', stressBadge(r[0])), h('p', null, r[1]));
+        }),
+        h('h3', null, 'Other routes ' + f.name + ' could turn to'),
+        list(D.sources.filter(function (s) { return chosen().indexOf(s.id) < 0; }).map(function (s) { return s.name + ': ' + D.stressLevels[res[s.id][0]].label + '. ' + res[s.id][1]; })));
+    }
+    return h('div', null,
+      heading('Stress-test the plan'),
+      h('p', null, 'Your plan: main = ' + src(p.main).name + (p.backup ? ', back-up = ' + src(p.backup).name : ', no back-up') + '. Pick a disruption to see how it holds up. You can try each one. The result is a conversation aid in words and symbols, not a prediction.'),
+      group, out, facPanel('stress'),
+      h('div', { class: 'row' },
+        h('button', { type: 'button', class: 'btn alt', onclick: function () { go('routes'); } }, 'Change the plan'),
+        h('button', { type: 'button', class: 'btn', disabled: !p.disruption, onclick: function () { go('report'); } }, 'See the fit report')));
+  }
+
+  function cover(f, dimId, routes) {
+    var vals = routes.map(function (r) { return f.assess[r][dimId][0]; });
+    if (vals.indexOf('g') >= 0) return 'g';
+    if (vals.indexOf('p') >= 0) return 'p';
+    if (vals.indexOf('u') >= 0) return 'u';
+    return 'w';
+  }
+  var COVER_TEXT = { g: 'Well covered', p: 'Partly covered', u: 'Not known: check', w: 'Still open' };
+
+  function screenReport() {
+    var f = farmer(), p = plan(), ids = chosen();
+    var thead = h('thead', null, h('tr', null, h('th', { scope: 'col' }, 'Need'), h('th', { scope: 'col' }, 'How much it matters'),
+      ids.map(function (id, i) { return h('th', { scope: 'col' }, (i === 0 ? 'Main: ' : 'Back-up: ') + src(id).name); }),
+      ids.length > 1 ? h('th', { scope: 'col' }, 'Together') : null));
+    var tbody = h('tbody', null, D.dimensions.map(function (d) {
+      return h('tr', null, h('th', { scope: 'row' }, d.label), h('td', null, D.importanceLabel[f.importance[d.id]]),
+        ids.map(function (id) { var a = f.assess[id][d.id]; return h('td', null, lvl(a[0]), h('span', { class: 'cellnote' }, a[1])); }),
+        ids.length > 1 ? h('td', null, lvl(cover(f, d.id, ids)), h('span', { class: 'cellnote' }, COVER_TEXT[cover(f, d.id, ids)])) : null);
+    }));
+    var gaps = D.dimensions.filter(function (d) { return f.importance[d.id] === 'high' && cover(f, d.id, ids) !== 'g'; });
+    var unknowns = [];
+    ids.forEach(function (id) { D.dimensions.forEach(function (d) { if (f.assess[id][d.id][0] === 'u') unknowns.push(src(id).name + ', ' + d.label.toLowerCase() + ': ' + f.assess[id][d.id][1]); }); });
+    return h('div', null,
+      heading('Fit report for ' + f.name),
+      h('p', { class: 'fiction' }, 'Fictional farmer, qualitative judgements by the pilot author. This is not a score and not a prediction.'),
+      h('p', null, 'How your plan meets each need. Symbols and words, not colour alone.'),
+      tableWrap('Fit of the plan to ' + f.name + '’s needs', h('table', null, h('caption', null, 'Plan fit by need'), thead, tbody)),
+      h('div', { class: 'card' }, h('h2', { style: 'margin-top:0' }, 'What the plan covers and what is still open'),
+        gaps.length ? [h('p', null, 'Needs that matter most to ' + f.name + ' and are not fully covered:'), list(gaps.map(function (d) { return d.label + ': ' + COVER_TEXT[cover(f, d.id, ids)].toLowerCase() + '. ' + d.q; }))]
+          : h('p', null, 'Every need that matters most to ' + f.name + ' is covered by at least one chosen route. Others may still be partly covered.')),
+      h('div', { class: 'card' }, h('h2', { style: 'margin-top:0' }, 'What to check before committing'),
+        list(ids.map(function (id) { return src(id).name + ': ' + src(id).check; }))),
+      h('div', { class: 'card' }, h('h2', { style: 'margin-top:0' }, 'What we do not know'),
+        unknowns.length ? list(unknowns) : h('p', null, 'No cell is marked unknown for your chosen routes.'),
+        h('p', { class: 'small' }, 'Also unknown: how these invented cases compare with real farmers in a real place. Treat everything as a prompt for discussion.')),
+      h('p', null, f.wholeNote),
+      facPanel('report'),
+      nav('stress', 'debrief', 'Go to the debrief'));
+  }
+
+  function summaryText() {
+    var lines = ['G01 seed-choice summary (fictional farmers, pilot for review)'];
+    D.farmers.forEach(function (f) {
+      var p = state.plans[f.id]; if (!p || !p.main) return;
+      var ids = [p.main, p.backup].filter(Boolean);
+      var gaps = D.dimensions.filter(function (d) { return f.importance[d.id] === 'high' && cover(f, d.id, ids) !== 'g'; }).map(function (d) { return d.label; });
+      lines.push(f.name + ' (' + f.crop + '): main = ' + src(p.main).name + '; back-up = ' + (p.backup ? src(p.backup).name : 'none') + '; stress test = ' + (p.disruption ? byId(D.disruptions, p.disruption).label : 'not done') + '; top needs not fully covered = ' + (gaps.length ? gaps.join(', ') : 'none'));
+    });
+    return lines.join('\n');
+  }
+
+  function screenDebrief() {
+    var f = farmer(), p = plan(), ids = chosen();
+    var role = function (id) { return p.main === id ? ' (your main)' : p.backup === id ? ' (your back-up)' : ''; };
+    var map = h('table', null, h('caption', null, 'All five routes for ' + f.name + ' (fictional)'),
+      h('thead', null, h('tr', null, h('th', { scope: 'col' }, 'Route'), D.dimensions.map(function (d) { return h('th', { scope: 'col' }, d.label, h('span', { class: 'cellnote' }, D.importanceLabel[f.importance[d.id]])); }))),
+      h('tbody', null, D.sources.map(function (s) {
+        return h('tr', null, h('th', { scope: 'row', class: role(s.id) ? 'win' : null }, s.name + role(s.id)),
+          D.dimensions.map(function (d) { var a = f.assess[s.id][d.id]; return h('td', null, lvl(a[0]), h('span', { class: 'cellnote' }, a[1])); }));
+      })));
+    var high = D.dimensions.filter(function (d) { return f.importance[d.id] === 'high'; });
+    var derived = D.sources.map(function (s) {
+      var m = [], gp = [];
+      high.forEach(function (d) { (f.assess[s.id][d.id][0] === 'g' ? m : gp).push(d.label.toLowerCase()); });
+      return s.name + ': meets ' + (m.length ? m.join(', ') : 'none') + (gp.length ? '; partly, weak or unknown on ' + gp.join(', ') : '') + '.';
+    });
+    var fnTable = h('table', null, h('caption', null, 'Eight sector functions (V2.0) and your chosen routes. Simplified, to verify.'),
+      h('thead', null, h('tr', null, h('th', { scope: 'col' }, 'Sector function'), h('th', { scope: 'col' }, 'Used by your plan?'), h('th', { scope: 'col' }, 'What it covers'))),
+      h('tbody', null, D.functions.map(function (fn) {
+        var users = ids.filter(function (id) { return src(id).functions.indexOf(fn.id) >= 0; }).map(function (id) { return src(id).name; });
+        return h('tr', null, h('th', { scope: 'row' }, fn.name), h('td', null, users.length ? 'Yes: ' + users.join(', ') : 'Not leaned on'), h('td', null, fn.note));
+      })));
+    var tried = D.farmers.filter(function (x) { return state.plans[x.id] && state.plans[x.id].main; });
+    var cmp = null;
+    if (tried.length >= 2) {
+      var mains = tried.map(function (x) { return state.plans[x.id].main; });
+      var same = mains.every(function (m) { return m === mains[0]; });
+      cmp = [tableWrap('Comparison across farmers', h('table', null, h('caption', null, 'Your plans across farmers'),
+        h('thead', null, h('tr', null, ['Farmer', 'Crop', 'Main', 'Back-up', 'Stress test'].map(function (c) { return h('th', { scope: 'col' }, c); }))),
+        h('tbody', null, tried.map(function (x) { var q = state.plans[x.id]; return h('tr', null, h('th', { scope: 'row' }, x.name), h('td', null, x.crop), h('td', null, src(q.main).name), h('td', null, q.backup ? src(q.backup).name : 'none'), h('td', null, q.disruption ? byId(D.disruptions, q.disruption).label : 'not done')); })))),
+        h('p', null, same ? 'You chose the same main route for every farmer so far. What would have to change about the farmer for a different route to win?' : 'Your main route changed between farmers. That is the point: the answer depends on the farmer, the crop and the season.')];
+    } else {
+      cmp = h('p', null, 'Try a second farmer to compare plans. Different farmers usually need different routes.');
+    }
+    var ta = h('textarea', { id: 'summary', readonly: true, 'aria-label': 'Summary of your plans, to copy' }); ta.value = summaryText();
+    return h('div', null,
+      heading('Debrief: ' + f.name),
+      h('p', null, f.wholeNote),
+      h('h2', null, 'The full fit map'),
+      h('p', null, 'No route is best for everything. Here is every route for ' + f.name + ', so you can compare it with your choice.'),
+      tableWrap('Fit map of all routes', map),
+      h('h2', null, 'Against the needs that matter most'),
+      list(derived),
+      h('h2', null, 'Behind the choice: eight sector functions'),
+      h('p', null, 'The routes depend on different parts of the seed sector. A route that fits a farmer well may rely on functions that are weak in a real place.'),
+      tableWrap('Sector function lens', fnTable),
+      h('h2', null, 'Reflect'), h('ol', null, D.prompts.map(function (t) { return h('li', null, t); })),
+      h('h2', null, 'Compare across farmers'), cmp,
+      h('h2', null, 'Summary to copy'), ta,
+      h('div', { class: 'row' },
+        h('button', { type: 'button', class: 'btn alt', onclick: function () { copy(ta); } }, 'Copy summary'),
+        h('button', { type: 'button', class: 'btn', onclick: function () { go('start'); } }, 'Try another farmer'),
+        h('button', { type: 'button', class: 'btn alt', onclick: function () { state.plans[f.id] = { main: null, backup: null, disruption: null }; save(); go('routes'); announce('Plan cleared for ' + f.name); } }, 'Replan ' + f.name)),
+      facPanel('debrief'));
+  }
+  function copy(ta) {
+    try { ta.select(); if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value); else document.execCommand('copy'); announce('Summary copied.'); }
+    catch (e) { announce('Select the text and copy it manually.'); }
+  }
+
+  function screenAbout() {
+    var reg = [
+      ['Route descriptions (can meet, watch for, check)', 'General statements written by the pilot author from general seed-systems knowledge and the ISSD framing in the V2.0 concept note.', 'Unverified'],
+      ['Ratings in the fit grids', 'Qualitative judgements for each invented farmer. Not measured data.', 'Unverified. Fictional'],
+      ['Stress-test results', 'Qualitative reasoning about each route under each disruption. No probabilities.', 'Unverified'],
+      ['Route to sector function mapping', 'Simplified by the author using the eight functions in the V2.0 concept note.', 'Unverified. Simplified'],
+      ['Farmers, places, seasons', 'Invented. They do not describe real people or places.', 'Fictional by design'],
+      ['Statements on hybrids and saved seed', 'General agronomic statements.', 'Verify with a seed-systems expert']
+    ];
+    return h('div', null,
+      heading('About, rubric and sources'),
+      h('p', { class: 'fiction' }, D.meta.status + ' Version ' + D.meta.version + '. Linked to: ' + D.meta.module + '.'),
+      h('h2', null, 'How feedback works (rubric)'),
+      list([
+        'No points, no totals, no probabilities, no yield numbers.',
+        'Each route is described against five needs: timing, cash and cost, fit to crop and wishes, quality information, reach and quantity.',
+        'Four levels, always shown with a symbol and words: ● meets the need, ◐ partly meets, ○ does not meet well, ? not known.',
+        'Each farmer has a different set of needs that matter most. The same route can fit one farmer and not another.',
+        '"Together" combines your main and back-up routes: well covered if any chosen route meets the need, partly if any partly meets it, not known if only unknowns remain, still open otherwise.',
+        'The stress test describes how a route holds up in words: holds up, under strain, exposed, or depends.'
+      ]),
+      h('h2', null, 'Source register'),
+      tableWrap('Source register', h('table', null, h('caption', null, 'Where each kind of content comes from and its status'),
+        h('thead', null, h('tr', null, ['Content', 'Basis', 'Status'].map(function (c) { return h('th', { scope: 'col' }, c); }))),
+        h('tbody', null, reg.map(function (r) { return h('tr', null, r.map(function (c, i) { return h(i === 0 ? 'th' : 'td', i === 0 ? { scope: 'row' } : null, c); })); })))),
+      h('p', null, 'Review needed before any release: a seed-systems expert should check all generic statements, and the course team should decide on learner group and depth.'),
+      h('h2', null, 'Accessibility and privacy'),
+      list(['Works with keyboard only. No drag and drop.', 'Respects reduced-motion settings. Symbols and words, not colour alone.', 'No data leaves your device. Saving is optional and off by default.']),
+      h('button', { type: 'button', class: 'btn', onclick: function () { go(state.farmerId ? 'meet' : 'start'); } }, 'Back to the activity'));
+  }
+
+  /* ---------- render ---------- */
+  var aboutOpen = false;
+  function render(keepFocus) {
+    var s = state.screen;
+    var el;
+    if (aboutOpen) el = screenAbout();
+    else if (s === 'meet') el = screenMeet();
+    else if (s === 'routes') el = screenRoutes();
+    else if (s === 'stress') el = screenStress();
+    else if (s === 'report') el = screenReport();
+    else if (s === 'debrief') el = screenDebrief();
+    else el = screenStart();
+    var y = window.scrollY, active = document.activeElement && document.activeElement.id;
+    $app.innerHTML = '';
+    $app.appendChild(el);
+    renderSteps();
+    var hh = document.getElementById('h1');
+    document.title = (hh ? hh.textContent + ' · ' : '') + 'G01 seed choices';
+    if (keepFocus === true) {
+      window.scrollTo(0, y);
+      if (active && document.getElementById(active)) document.getElementById(active).focus();
+    } else {
+      if (hh) hh.focus();
+      window.scrollTo(0, 0);
+      announce(hh ? hh.textContent : '');
+    }
+  }
+
+  /* ---------- wire up footer ---------- */
+  document.getElementById('btn-about').addEventListener('click', function () { aboutOpen = true; render(); });
+  document.getElementById('btn-reset').addEventListener('click', resetAll);
+  var bf = document.getElementById('btn-fac');
+  bf.setAttribute('aria-pressed', state.facilitator ? 'true' : 'false');
+  bf.addEventListener('click', function () { state.facilitator = !state.facilitator; bf.setAttribute('aria-pressed', state.facilitator ? 'true' : 'false'); render(true); announce('Facilitator notes ' + (state.facilitator ? 'on' : 'off')); });
+  var origGo = go;
+  go = function (s) { aboutOpen = false; origGo(s); };
+
+  load();
+  render();
+  window.__g01 = { state: state, go: function (s) { go(s); }, pick: pickFarmer, setRole: setRole };
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+# Many routes to the farmer: transcript
+
+Script only. No recorded narration. Caption times are provisional.
+
+## 1. One farmer, one season (00:00)
+
+Meet Amina, a fictional farmer. She has a small plot, and the rains will soon decide her season. Before she plants, she must answer a question that sounds simple: where will her seed come from?
+
+## 2. Many routes (00:16)
+
+Seed can reach her by many routes. She might keep some from her own harvest. She might ask a neighbour. She might buy at the local market, join a cooperative that multiplies seed, or visit a company's shop.
+
+## 3. Different needs (00:36)
+
+Each route can meet different needs. Saved seed is close at hand and needs little cash. A neighbour may share a variety known to do well nearby. The market stays open when she is ready. A cooperative may offer quality information. A company may offer labelled seed, though cash and travel can get in the way.
+
+## 4. No single winner (01:00)
+
+No route is best for every farmer, or every season. When cash is short, saved seed may fit. When the rains are late, the market may help. When the crop is a hybrid, saved seed will not repeat its performance, so fresh seed is needed.
+
+## 5. Behind the choice (01:20)
+
+Behind her choice sit eight sector functions: production, value addition and distribution, service provision, utilisation, stakeholder organisation, regulation, coordination and financing. Together they shape what seed exists, who can reach it, and what risk she carries.
+
+## 6. Whose voice is missing? (01:42)
+
+Notice whose voice is missing from this story. Who else chooses, shares or sells seed? Who carries the cost? Now try it yourself with three fictional farmers, and see why the answer changes.
+
