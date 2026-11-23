@@ -41,7 +41,7 @@ Pilot gaps to resolve with the course team:
 | 5 | 1:20–1:42 | Behind the choice | Eight function tags assemble under the field in V2.0 order. |
 | 6 | 1:42–2:00 | Whose voice is missing? | Other people appear at the edge of the frame (neighbours, a seed seller, a woman seed keeper). Then an invitation: try it with three fictional farmers. |
 
-Narration is a script only. No audio was recorded. Timings are provisional until audio is measured.
+A recorded narration (75.7 s) was added later and is embedded; the timings below are the original plan (about 120 s). Built scene starts are now about 0 / 11.4 / 22.2 / 37.7 / 50.3 / 65.8 s (total 76.4 s), following the recording.
 
 ## 4. G01 storyboard and choices
 

@@ -1,10 +1,10 @@
 {
   "status": "Planned timing; verify against actual audio",
-  "duration_seconds": 120,
+  "duration_seconds": 76.37,
   "scenes": [
     {
       "title": "One farmer, one season",
-      "duration_seconds": 16,
+      "duration_seconds": 11.36,
       "narration": "Meet Amina, a fictional farmer. She has a small plot, and the rains will soon decide her season. Before she plants, she must answer a question that sounds simple: where will her seed come from?",
       "caps": [
         "Meet Amina, a fictional farmer.",
@@ -16,11 +16,11 @@
       "relative_animation_cues": "0-3s: title slip and Amina settle; 3-8s: cloud drifts in with slow parallax; 10-13s: question slip lands on 'where will her seed come from'; finish with a reading hold.",
       "scene": 1,
       "start_seconds": 0,
-      "end_seconds": 16
+      "end_seconds": 11.36
     },
     {
       "title": "Many routes",
-      "duration_seconds": 20,
+      "duration_seconds": 10.88,
       "narration": "Seed can reach her by many routes. She might keep some from her own harvest. She might ask a neighbour. She might buy at the local market, join a cooperative that multiplies seed, or visit a company's shop.",
       "caps": [
         "Seed can reach her by many routes.",
@@ -33,12 +33,12 @@
       "illustration": "Amina stands before her patchwork field. Five small paper scenes (her own store, a neighbour, a market stall, a cooperative store, a seed company shop) arrive one by one, each linked to her field by a paper trail.",
       "relative_animation_cues": "0-3s: field and Amina; then each route tile arrives on its sentence and its trail draws toward the field; hold with all five trails visible.",
       "scene": 2,
-      "start_seconds": 16,
-      "end_seconds": 36
+      "start_seconds": 11.36,
+      "end_seconds": 22.240000000000002
     },
     {
       "title": "Different needs",
-      "duration_seconds": 24,
+      "duration_seconds": 15.49,
       "narration": "Each route can meet different needs. Saved seed is close at hand and needs little cash. A neighbour may share a variety known to do well nearby. The market stays open when she is ready. A cooperative may offer quality information. A company may offer labelled seed, though cash and travel can get in the way.",
       "caps": [
         "Each route can meet different needs.",
@@ -52,12 +52,12 @@
       "illustration": "Five paper cards. Each shows the route, a 'can meet' slip and, later, a 'watch for' slip. Every route has a strength and a catch.",
       "relative_animation_cues": "Cards arrive on their sentences; at 'though cash and travel' the catch slips sweep in across all cards and the company's catch is highlighted.",
       "scene": 3,
-      "start_seconds": 36,
-      "end_seconds": 60
+      "start_seconds": 22.240000000000002,
+      "end_seconds": 37.730000000000004
     },
     {
       "title": "No single winner",
-      "duration_seconds": 20,
+      "duration_seconds": 12.59,
       "narration": "No route is best for every farmer, or every season. When cash is short, saved seed may fit. When the rains are late, the market may help. When the crop is a hybrid, saved seed will not repeat its performance, so fresh seed is needed.",
       "caps": [
         "No route is best for every farmer, or every season.",
@@ -69,12 +69,12 @@
       "illustration": "The five routes in a row. Three circumstance cards arrive in turn. A 'fits here' flag moves between routes as the circumstance changes.",
       "relative_animation_cues": "Each circumstance card lifts when spoken and the flags hop to the routes that may fit; the previous flags retire.",
       "scene": 4,
-      "start_seconds": 60,
-      "end_seconds": 80
+      "start_seconds": 37.730000000000004,
+      "end_seconds": 50.32000000000001
     },
     {
       "title": "Behind the choice",
-      "duration_seconds": 22,
+      "duration_seconds": 15.5,
       "narration": "Behind her choice sit eight sector functions: production, value addition and distribution, service provision, utilisation, stakeholder organisation, regulation, coordination and financing. Together they shape what seed exists, who can reach it, and what risk she carries.",
       "caps": [
         "Behind her choice sit eight sector functions:",
@@ -88,12 +88,12 @@
       "illustration": "A paper circle with Amina and her field sits in the middle. Eight function tiles arrive in pairs on the left and right, in V2.0 order, then connect to the circle.",
       "relative_animation_cues": "Pairs of tiles arrive on each phrase; connectors draw on 'together they shape'; a final slip lists what the functions shape.",
       "scene": 5,
-      "start_seconds": 80,
-      "end_seconds": 102
+      "start_seconds": 50.32000000000001,
+      "end_seconds": 65.82000000000001
     },
     {
       "title": "Whose voice is missing?",
-      "duration_seconds": 18,
+      "duration_seconds": 10.55,
       "narration": "Notice whose voice is missing from this story. Who else chooses, shares or sells seed? Who carries the cost? Now try it yourself with three fictional farmers, and see why the answer changes.",
       "caps": [
         "Notice whose voice is missing from this story.",
@@ -105,8 +105,8 @@
       "illustration": "Three silhouettes at the field edge take colour: a neighbour, a seed seller and a woman seed keeper. Coins appear. Then three fictional farmer cards (Amina, Joseph, Neema) invite the learner into the game.",
       "relative_animation_cues": "Silhouettes first, colour on 'Who else'; coins on 'who carries the cost'; people fall back and the three cards rise on 'try it yourself'.",
       "scene": 6,
-      "start_seconds": 102,
-      "end_seconds": 120
+      "start_seconds": 65.82000000000001,
+      "end_seconds": 76.37
     }
   ]
 }

@@ -21,8 +21,11 @@ const safeJSON=v=>JSON.stringify(v).replace(/</g,'\\u003c').replace(/\u2028/g,'\
 const escapeHTML=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 const beats=rows.map((s,i)=>({id:'scene'+(i+1),dur:s.duration_seconds,caps:s.caps}));
 const data=`const BEATS=${safeJSON(beats)};BEATS.forEach(b=>{b.chunks=b.caps.map(s=>({s,w:s.split(/\s+/).length}));b.words=b.chunks.reduce((a,c)=>a+c.w,0);b.dur0=b.dur});const LEAD=.4,TAIL=0,N=BEATS.length,LAST=N-1,OPT=-1;`;
+let embed='const EMBED=null;';
+const mp3=path.join(root,'Narration_recorded.mp3'),tj=path.join(root,'narration_timing.json');
+if(fs.existsSync(mp3)&&fs.existsSync(tj)){const t=JSON.parse(fs.readFileSync(tj,'utf8'));embed='const EMBED='+safeJSON({src:'data:audio/mpeg;base64,'+fs.readFileSync(mp3).toString('base64'),dur:t.audio_seconds,bounds:t.bounds,wins:t.wins})+';';}
 let html=fs.readFileSync(path.join(root,'player_template.html'),'utf8');
-html=html.replace('/*__BEATS__*/',()=>data).replace('/*__SCENES__*/',()=>source).replace('/*__BUILDERS__*/',rows.map((s,i)=>'S'+(i+1)).join(','));
+html=html.replace('/*__BEATS__*/',()=>data+embed).replace('/*__SCENES__*/',()=>source).replace('/*__BUILDERS__*/',rows.map((s,i)=>'S'+(i+1)).join(','));
 html=html.replaceAll('__PROJECT_TITLE__',escapeHTML(manifest.title)).replaceAll('__END_LINE__',escapeHTML(manifest.end_line||manifest.title)).replaceAll('__PREFERENCES_KEY__','paper-cut-'+manifest.title.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
 const a=fs.readFileSync(path.join(root,'paper-sans-regular.woff')).toString('base64'),b=fs.readFileSync(path.join(root,'paper-sans-bold.woff')).toString('base64');
 html=html.replace('<style>','<style>@font-face{font-family:"Egypt Paper Sans";font-weight:400;font-display:block;src:url(data:font/woff;base64,'+a+')}@font-face{font-family:"Egypt Paper Sans";font-weight:700 900;font-display:block;src:url(data:font/woff;base64,'+b+')}');

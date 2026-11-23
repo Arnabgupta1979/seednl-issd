@@ -1,15 +1,15 @@
 # Many routes to the farmer
 
-Planned duration: 120 seconds. Timing requires checking against the actual voice file.
+Planned duration: 76.37 seconds. Timing requires checking against the actual voice file.
 
 | Scene | Title | Start | End |
 |---|---|---|---|
-| 1 | One farmer, one season | 00:00.0 | 00:16.0 |
-| 2 | Many routes | 00:16.0 | 00:36.0 |
-| 3 | Different needs | 00:36.0 | 01:00.0 |
-| 4 | No single winner | 01:00.0 | 01:20.0 |
-| 5 | Behind the choice | 01:20.0 | 01:42.0 |
-| 6 | Whose voice is missing? | 01:42.0 | 02:00.0 |
+| 1 | One farmer, one season | 00:00.0 | 00:11.4 |
+| 2 | Many routes | 00:11.4 | 00:22.2 |
+| 3 | Different needs | 00:22.2 | 00:37.7 |
+| 4 | No single winner | 00:37.7 | 00:50.3 |
+| 5 | Behind the choice | 00:50.3 | 01:05.8 |
+| 6 | Whose voice is missing? | 01:05.8 | 01:16.4 |
 
 ## 1. One farmer, one season
 
@@ -61,7 +61,7 @@ Motion: Silhouettes first, colour on 'Who else'; coins on 'who carries the cost'
 
 ## Music prompt
 
-Instrumental underscore, 80 BPM, warm and unhurried. Soft plucked strings and a gentle kalimba-like melody over sustained pads and light hand percussion, mostly major with one thoughtful lift in the middle. No vocals, no risers, no heavy bass. Gentle build to a hopeful close, then a soft fade. About 2 minutes.
+Instrumental underscore, 80 BPM, warm and unhurried. Soft plucked strings and a gentle kalimba-like melody over sustained pads and light hand percussion, mostly major with one thoughtful lift in the middle. No vocals, no risers, no heavy bass. Gentle build to a hopeful close, then a soft fade. About 80 seconds.
 
 ## Sources
 
@@ -71,4 +71,4 @@ Fictional case: Amina, her plot and the places shown are invented for teaching. 
 
 General statements (saved hybrid seed does not reproduce the parent's performance; routes differ in cash, travel and quality information) are stated as tendencies and must be checked by a seed-systems expert before release.
 
-Narration is a script only. No recorded audio was produced for this pilot.
+Narration: a recorded audio file (Narration_recorded.mp3, about 76 s) was supplied for the pilot. Its file name suggests a synthetic voice generated through Replicate; the voice, model and licence terms are not recorded and must be confirmed before any release. The words match the script exactly (checked with a local speech-to-text pass).

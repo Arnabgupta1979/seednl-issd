@@ -5,7 +5,7 @@ Demo pilots for the proposed SeedNL × WSER course on guiding seed sector transf
 | Path | What |
 |---|---|
 | `index.html` | Landing page linking the demos |
-| `demos/e02-many-routes/` | E02 animated explainer, script and captions (**no recorded audio**) plus editable sources |
+| `demos/e02-many-routes/` | E02 animated explainer with embedded recorded narration (voice source and licence to be confirmed), script, captions and editable sources |
 | `demos/g01-seed-choices/` | G01 farmer seed-choice activity plus editable sources and docs |
 | `docs/` | Mapping to the V2.0 objectives, storyboard, debrief, test record |
 
@@ -15,9 +15,12 @@ Settings → Pages → Deploy from branch → `main` / root. The site is then at
 ## View locally
 Unzip or clone and double-click `index.html`. Chrome or Edge is safest. If the game's separate script files are blocked, open `demos/g01-seed-choices/G01_standalone.html`.
 
+## Narration
+`Narration_recorded.mp3` (75.7 s) is embedded in `Explainer.html`. All 243 words match the script (local speech-to-text check). Not yet checked by ear. The file name suggests a synthetic voice made through Replicate; confirm the voice, model and licence before any release. Browsers may need a click on Play before sound starts.
+
 ## Edit
 - **Game:** content is in `demos/g01-seed-choices/js/data.js`. After editing run `node build_single.cjs` in that folder.
-- **Explainer:** edit `scenes.js` and `manifest.json`, then `node build.cjs` and `node make_captions.cjs` in `demos/e02-many-routes/`.
+- **Explainer:** edit `scenes.js` and `manifest.json`, then `node build.cjs` and `node make_captions.cjs` in `demos/e02-many-routes/`. To swap the recording see `align_narration.cjs` (header comment).
 
 ## Adding another demo
 Create `demos/<name>/`, add a card to `index.html`, add a line to this table.

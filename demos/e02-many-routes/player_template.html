@@ -535,7 +535,7 @@ function buildPanel(){
 }
 function afterDurChange(){recalc();$('seek').max=total;$('total').textContent='/ '+fmt(total);save();render(clamp(T,0,total))}
 function status(s){$('vostat').textContent=s}
-$('reset').onclick=()=>{D=BEATS.map(b=>b.dur0);SW=BEATS.map(()=>null);buildPanel();afterDurChange()};
+$('reset').onclick=()=>{D=BEATS.map(b=>b.dur0);SW=BEATS.map(()=>null);if(EMBED){vo.src=EMBED.src;audioDur=EMBED.dur;applyBounds(EMBED.bounds,EMBED.wins);return}buildPanel();afterDurChange()};
 $('capt').onclick=e=>{capsOn=!capsOn;e.currentTarget.setAttribute('aria-pressed',capsOn);e.currentTarget.textContent=capsOn?'Captions on':'Captions off';caps.cur='\u0000';save();render(T)};
 $('tag').addEventListener('input',()=>{scenes[LAST].setTag($('tag').value);save()});
 $('inc7').addEventListener('change',e=>{inc7=e.target.checked;SW=BEATS.map(()=>null);recalc();buildPanel();afterDurChange();status(inc7?'Scene 7 is in. Expect 7 long pauses in the narration (one between each pair of scenes).':'Scene 7 is out. Expect 6 long pauses in the narration.')});
@@ -644,7 +644,9 @@ async function init(){
   scenes[LAST].setTag($('tag').value);
   $('inc7').checked=inc7;
   $('capt').setAttribute('aria-pressed',capsOn);$('capt').textContent=capsOn?'Captions on':'Captions off';
-  recalc();buildPanel();$('seek').max=total;$('total').textContent='/ '+fmt(total);
+  recalc();buildPanel();
+  if(EMBED){vo.src=EMBED.src;audioDur=EMBED.dur;applyBounds(EMBED.bounds,EMBED.wins);['tap','fit'].forEach(k=>$(k).disabled=false);status('Recorded narration is built in. To try another voice file, load it above.')}
+  $('seek').max=total;$('total').textContent='/ '+fmt(total);
   render(POSTER);
   window.__ai={render:t=>{playing=false;render(t)},total:()=>total,starts:()=>ord.map(i=>starts[i]),cu:(i,j)=>cu(i,j),setInc7:v=>{inc7=v;recalc()},D:()=>D.slice(),ord:()=>ord.slice(),bounds:applyBounds};
 }

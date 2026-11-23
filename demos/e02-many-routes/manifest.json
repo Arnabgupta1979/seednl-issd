@@ -4,7 +4,7 @@
   "scenes": [
     {
       "title": "One farmer, one season",
-      "duration_seconds": 16,
+      "duration_seconds": 11.36,
       "narration": "Meet Amina, a fictional farmer. She has a small plot, and the rains will soon decide her season. Before she plants, she must answer a question that sounds simple: where will her seed come from?",
       "caps": [
         "Meet Amina, a fictional farmer.",
@@ -17,7 +17,7 @@
     },
     {
       "title": "Many routes",
-      "duration_seconds": 20,
+      "duration_seconds": 10.88,
       "narration": "Seed can reach her by many routes. She might keep some from her own harvest. She might ask a neighbour. She might buy at the local market, join a cooperative that multiplies seed, or visit a company's shop.",
       "caps": [
         "Seed can reach her by many routes.",
@@ -32,7 +32,7 @@
     },
     {
       "title": "Different needs",
-      "duration_seconds": 24,
+      "duration_seconds": 15.49,
       "narration": "Each route can meet different needs. Saved seed is close at hand and needs little cash. A neighbour may share a variety known to do well nearby. The market stays open when she is ready. A cooperative may offer quality information. A company may offer labelled seed, though cash and travel can get in the way.",
       "caps": [
         "Each route can meet different needs.",
@@ -48,7 +48,7 @@
     },
     {
       "title": "No single winner",
-      "duration_seconds": 20,
+      "duration_seconds": 12.59,
       "narration": "No route is best for every farmer, or every season. When cash is short, saved seed may fit. When the rains are late, the market may help. When the crop is a hybrid, saved seed will not repeat its performance, so fresh seed is needed.",
       "caps": [
         "No route is best for every farmer, or every season.",
@@ -62,7 +62,7 @@
     },
     {
       "title": "Behind the choice",
-      "duration_seconds": 22,
+      "duration_seconds": 15.5,
       "narration": "Behind her choice sit eight sector functions: production, value addition and distribution, service provision, utilisation, stakeholder organisation, regulation, coordination and financing. Together they shape what seed exists, who can reach it, and what risk she carries.",
       "caps": [
         "Behind her choice sit eight sector functions:",
@@ -78,7 +78,7 @@
     },
     {
       "title": "Whose voice is missing?",
-      "duration_seconds": 18,
+      "duration_seconds": 10.55,
       "narration": "Notice whose voice is missing from this story. Who else chooses, shares or sells seed? Who carries the cost? Now try it yourself with three fictional farmers, and see why the answer changes.",
       "caps": [
         "Notice whose voice is missing from this story.",
@@ -95,9 +95,9 @@
     "Concept note V2.0 (06 Nov 2026): eight sector functions and ISSD framing of formal, informal and intermediary seed systems (Louwaars & de Boef, 2012, as cited there). Module 1 wording: 'trace how farmers obtain seed of two crops in one setting' and 'whose experience is missing'.",
     "Fictional case: Amina, her plot and the places shown are invented for teaching. They do not describe a real person, village or programme.",
     "General statements (saved hybrid seed does not reproduce the parent's performance; routes differ in cash, travel and quality information) are stated as tendencies and must be checked by a seed-systems expert before release.",
-    "Narration is a script only. No recorded audio was produced for this pilot."
+    "Narration: a recorded audio file (Narration_recorded.mp3, about 76 s) was supplied for the pilot. Its file name suggests a synthetic voice generated through Replicate; the voice, model and licence terms are not recorded and must be confirmed before any release. The words match the script exactly (checked with a local speech-to-text pass)."
   ],
-  "music_prompt": "Instrumental underscore, 80 BPM, warm and unhurried. Soft plucked strings and a gentle kalimba-like melody over sustained pads and light hand percussion, mostly major with one thoughtful lift in the middle. No vocals, no risers, no heavy bass. Gentle build to a hopeful close, then a soft fade. About 2 minutes.",
+  "music_prompt": "Instrumental underscore, 80 BPM, warm and unhurried. Soft plucked strings and a gentle kalimba-like melody over sustained pads and light hand percussion, mostly major with one thoughtful lift in the middle. No vocals, no risers, no heavy bass. Gentle build to a hopeful close, then a soft fade. About 80 seconds.",
   "youtube_title": "Many routes to the farmer (pilot explainer, fictional farmer)",
   "youtube_description": "A short illustrated explainer from a proposed SeedNL x WSER course on seed sector transformation. It follows a fictional farmer as she weighs five routes to seed and introduces the eight sector functions. Pilot for review; not a published course."
 }
