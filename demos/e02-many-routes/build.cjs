@@ -26,7 +26,7 @@ const mp3=path.join(root,'Narration_recorded.mp3'),tj=path.join(root,'narration_
 if(fs.existsSync(mp3)&&fs.existsSync(tj)){const t=JSON.parse(fs.readFileSync(tj,'utf8'));embed='const EMBED='+safeJSON({src:'data:audio/mpeg;base64,'+fs.readFileSync(mp3).toString('base64'),dur:t.audio_seconds,bounds:t.bounds,wins:t.wins})+';';}
 let html=fs.readFileSync(path.join(root,'player_template.html'),'utf8');
 html=html.replace('/*__BEATS__*/',()=>data+embed).replace('/*__SCENES__*/',()=>source).replace('/*__BUILDERS__*/',rows.map((s,i)=>'S'+(i+1)).join(','));
-html=html.replaceAll('__PROJECT_TITLE__',escapeHTML(manifest.title)).replaceAll('__END_LINE__',escapeHTML(manifest.end_line||manifest.title)).replaceAll('__PREFERENCES_KEY__','paper-cut-'+manifest.title.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
+html=html.replaceAll('__PROJECT_TITLE__',escapeHTML(manifest.title)).replaceAll('__ACTIVITY_URL__',escapeHTML(manifest.activity_url||'../G01_Farmer_seed_choices/index.html')).replaceAll('__END_LINE__',escapeHTML(manifest.end_line||manifest.title)).replaceAll('__PREFERENCES_KEY__','paper-cut-'+manifest.title.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
 const a=fs.readFileSync(path.join(root,'paper-sans-regular.woff')).toString('base64'),b=fs.readFileSync(path.join(root,'paper-sans-bold.woff')).toString('base64');
 html=html.replace('<style>','<style>@font-face{font-family:"Egypt Paper Sans";font-weight:400;font-display:block;src:url(data:font/woff;base64,'+a+')}@font-face{font-family:"Egypt Paper Sans";font-weight:700 900;font-display:block;src:url(data:font/woff;base64,'+b+')}');
 requireValue(!/\/\*__(?:BEATS|SCENES|BUILDERS)__\*\//.test(html),'Unexpanded engine marker');
