@@ -58,6 +58,53 @@
   function list(items) { return h('ul', { class: 'clean' }, items.map(function (t) { return h('li', null, t); })); }
   function tableWrap(label, table) { return h('div', { class: 'tablewrap', role: 'region', 'aria-label': label, tabindex: '0' }, table); }
 
+
+  /* ---------- cartoon headshots (generated SVG, fictional people) ---------- */
+  var FACE = '<ellipse cx="62" cy="96" rx="7" ry="9" fill="SKIN2"/><ellipse cx="138" cy="96" rx="7" ry="9" fill="SKIN2"/>' +
+    '<ellipse cx="100" cy="94" rx="38" ry="44" fill="SKIN"/>';
+  var FEATURES = '<ellipse cx="86" cy="94" rx="4.600" ry="5.800" fill="#1d1410"/><ellipse cx="114" cy="94" rx="4.600" ry="5.800" fill="#1d1410"/>' +
+    '<circle cx="87.600" cy="92" r="1.600" fill="#fff"/><circle cx="115.600" cy="92" r="1.600" fill="#fff"/>' +
+    '<path d="M100 98c-2 6-4 9-1 10 3 1 5 0 6-1" fill="none" stroke="SKIN2" stroke-width="3" stroke-linecap="round"/>' +
+    '<path d="M86 113q14 12 28 0" fill="#fff" stroke="#3a1c14" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '<circle cx="74" cy="108" r="6" fill="#e0715a" opacity=".28"/><circle cx="126" cy="108" r="6" fill="#e0715a" opacity=".28"/>';
+  function mk(bg, body, skin, skin2) {
+    return '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">' + '<rect width="200" height="200" fill="' + bg + '"/>' + body.replace(/SKIN2/g, skin2).replace(/SKIN/g, skin) + '</svg>';
+  }
+  var PORTRAIT = {
+    amina: mk('#f6e4b4',
+      '<path d="M62 92c-6 22 0 40 8 46h60c8-6 14-24 8-46z" fill="#2a1a12"/>' +
+      '<path d="M18 200c0-34 34-56 82-56s82 22 82 56z" fill="#c4553a"/><path d="M80 146l20 22 20-22" fill="#f3e6c8"/>' +
+      '<rect x="87" y="122" width="26" height="30" rx="10" fill="SKIN2"/>' + FACE +
+      '<path d="M64 88c4-22 22-30 36-30s32 8 36 30c-10-10-26-14-36-14s-26 4-36 14z" fill="#2a1a12"/>' +
+      '<path d="M78 85q8-5 16-1M106 84q8-4 16 1" fill="none" stroke="#2a1a12" stroke-width="3.500" stroke-linecap="round"/>' + FEATURES +
+      '<ellipse cx="100" cy="68" rx="66" ry="14" fill="#e0a63a"/><path d="M62 68c0-34 76-34 76 0z" fill="#f2c14e"/><path d="M62 66c20 8 56 8 76 0v-7c-20 7-56 7-76 0z" fill="#c4553a"/>' +
+      '<circle cx="55" cy="106" r="3.500" fill="#f2c14e"/><circle cx="145" cy="106" r="3.500" fill="#f2c14e"/>',
+      '#8d5a3b', '#774a30'),
+    joseph: mk('#f8d6cb',
+      '<path d="M18 200c0-34 34-56 82-56s82 22 82 56z" fill="#2f5a3e"/><path d="M80 146l20 20 20-20" fill="#e8cf9a"/>' +
+      '<rect x="87" y="122" width="26" height="30" rx="10" fill="SKIN2"/>' + FACE +
+      '<path d="M62 88c-2-30 18-44 38-44s40 14 38 44c-4-14-12-24-22-26-10 4-30 4-42-2-4 6-8 16-12 28z" fill="#1d1410"/>' +
+      '<path d="M76 84l18-3M106 81l18 3" fill="none" stroke="#1d1410" stroke-width="4.500" stroke-linecap="round"/>' + FEATURES +
+      '<path d="M88 107c6-5 18-5 24 0-6 2-18 2-24 0z" fill="#1d1410"/>',
+      '#6b4128', '#573320'),
+    neema: mk('#d9e8d2',
+      '<circle cx="100" cy="62" r="40" fill="#1d1410"/><circle cx="66" cy="84" r="16" fill="#1d1410"/><circle cx="134" cy="84" r="16" fill="#1d1410"/>' +
+      '<path d="M18 200c0-34 34-56 82-56s82 22 82 56z" fill="#b0508a"/><path d="M78 148q22 22 44 0" fill="none" stroke="#f3e6c8" stroke-width="5"/>' +
+      '<rect x="87" y="122" width="26" height="30" rx="10" fill="SKIN2"/>' + FACE +
+      '<path d="M62 86c0-34 76-34 76 0-14-14-62-14-76 0z" fill="#e0a63a"/>' +
+      '<circle cx="76" cy="70" r="3" fill="#b0508a"/><circle cx="92" cy="64" r="3" fill="#b0508a"/><circle cx="108" cy="64" r="3" fill="#b0508a"/><circle cx="124" cy="70" r="3" fill="#b0508a"/>' +
+      '<path d="M76 85q8-5 16-1M108 84q8-4 16 1" fill="none" stroke="#1d1410" stroke-width="3.500" stroke-linecap="round"/>' + FEATURES +
+      '<circle cx="62" cy="108" r="3.500" fill="#e0a63a"/><circle cx="138" cy="108" r="3.500" fill="#e0a63a"/>',
+      '#a56b45', '#8c5a38')
+  };
+  function portrait(id, size) {
+    var w = document.createElement('span');
+    w.className = 'portrait' + (size ? ' ' + size : '');
+    w.setAttribute('aria-hidden', 'true');
+    w.innerHTML = PORTRAIT[id] || '';
+    return w;
+  }
+
   /* ---------- optional storage (opt-in, try/catch) ---------- */
   function save() {
     try {
@@ -147,6 +194,7 @@
           h('p', null, f.intro),
           h('ul', { class: 'chips' }, f.cropNote.split(', ').slice(0, 3).map(function (c) { return h('li', null, c); })),
           tried ? h('p', { class: 'small' }, 'You have already planned for ' + f.name + '.') : null,
+          portrait(f.id),
           h('button', { type: 'button', class: 'btn', onclick: function () { pickFarmer(f.id); } }, (tried ? 'Open ' : 'Meet ') + f.name));
       })),
       h('div', { class: 'card' },
@@ -169,7 +217,7 @@
           f.calendar[row].map(function (c, i) { return h('td', { class: i === f.decisionStage ? 'win' : null }, c); }));
       })));
     return h('div', null,
-      heading('Meet ' + f.name),
+      h('div', { class: 'meet-head' }, portrait(f.id, 'sm'), heading('Meet ' + f.name)),
       h('p', { class: 'fiction' }, 'Fictional farmer. Details are invented for this activity.'),
       h('p', null, f.intro),
       h('div', { class: 'grid' },
