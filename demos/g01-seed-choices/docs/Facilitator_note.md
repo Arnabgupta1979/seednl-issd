@@ -21,6 +21,6 @@
 
 **Debrief questions.** See the app (screen 6) and `00_Mapping_Storyboard_Debrief.md`.
 
-**Open the app with facilitator notes on:** add `?facilitator=1` to the address, or use the "Facilitator notes" button in the footer. (If an LMS strips the query string, use the button.)
+**Open the app with facilitator notes on:** add `?facilitator=1` to the address, or use the "Facilitator notes" button in the side menu. (If an LMS strips the query string, use the button.)
 
 **Limits.** Generic statements and ratings are unverified and need review by a seed-systems expert. Learner group and depth are not yet decided.

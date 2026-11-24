@@ -9,23 +9,36 @@
 </head>
 <body>
 <a class="skip" href="#app">Skip to the activity</a>
-<header class="top">
-  <div class="wrap">
-    <p class="kicker">Pilot for review · Proposed Module 1 · All farmers are fictional</p>
-    <p class="brand">Where will the seed come from?</p>
+<div class="shell">
+  <aside class="side">
+    <p class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 40" width="26" height="32" aria-hidden="true"><path d="M16 38c-5 0-8.500-3.800-8.500-8.800 0-6 4.500-10.200 8.500-14.700 4 4.500 8.500 8.700 8.500 14.700 0 5-3.500 8.800-8.500 8.800z" fill="#f4f1e6"/><path d="M16 14C16 8 12 4.500 5 4c0 6.500 4 10 11 10z" fill="#7fc15a"/><path d="M16 12c0-5 3-8 10-8.500C26 9 23 12 16 12z" fill="#a8d67f"/></svg>
+      <span>Seed Flow</span>
+    </p>
+    <nav aria-label="Activity steps">
+      <p class="side-label">Active</p>
+      <ol id="steps" class="steps"></ol>
+    </nav>
+    <div class="side-tools">
+      <button type="button" class="side-btn" id="btn-about"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.500C4 4.700 4.700 4 5.500 4H11v15H5.500A1.500 1.500 0 0 0 4 20.500zM20 5.500c0-.8-.7-1.500-1.500-1.500H13v15h5.500c.8 0 1.500.7 1.500 1.500z"/></svg>Resources</button>
+      <button type="button" class="side-btn" id="btn-fac" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6"/></svg>Facilitator notes</button>
+      <button type="button" class="side-btn" id="btn-reset"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 3-6.200M4 4v4.500h4.500"/></svg>Reset simulation</button>
+    </div>
+  </aside>
+  <div class="col">
+    <header class="topbar">
+      <p class="crumb">Proposed Module 1 <span aria-hidden="true">·</span> All farmers are fictional</p>
+      <span class="pill-review">Pilot for review</span>
+    </header>
+    <main id="app" tabindex="-1">
+      <noscript><p>This activity needs JavaScript. It runs locally in your browser and sends no data anywhere.</p></noscript>
+    </main>
+    <footer class="foot">
+      <p class="small">Offline, static page. No account, no tracking, no live AI. Nothing is saved unless you tick the box on the first screen.</p>
+    </footer>
   </div>
-</header>
-<nav class="wrap" aria-label="Activity steps"><ol id="steps" class="steps"></ol></nav>
-<main id="app" class="wrap" tabindex="-1">
-  <noscript><p>This activity needs JavaScript. It runs locally in your browser and sends no data anywhere.</p></noscript>
-</main>
+</div>
 <div id="status" class="sr" role="status" aria-live="polite"></div>
-<footer class="wrap foot">
-  <button type="button" class="btn link" id="btn-about">About, rubric and sources</button>
-  <button type="button" class="btn link" id="btn-fac" aria-pressed="false">Facilitator notes</button>
-  <button type="button" class="btn link" id="btn-reset">Reset everything</button>
-  <p class="small">Offline, static page. No account, no tracking, no live AI. Nothing is saved unless you tick the box on the first screen.</p>
-</footer>
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
 </body>

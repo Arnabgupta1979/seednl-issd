@@ -4,7 +4,16 @@
   var D = window.G01_DATA;
   var KEY = 'g01-seed-choices-v1';
   var ORDER = ['start', 'meet', 'routes', 'stress', 'report', 'debrief'];
-  var LABEL = { start: '1 Choose farmer', meet: '2 Meet the farmer', routes: '3 Routes and plan', stress: '4 Stress test', report: '5 Fit report', debrief: '6 Debrief' };
+  var LABEL = { start: 'Choose farmer', meet: 'Meet the farmer', routes: 'Routes and plan', stress: 'Stress test', report: 'Fit report', debrief: 'Debrief' };
+  var ICON = {
+    start: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 3.600-7 8-7s8 3 8 7"/>',
+    meet: '<path d="M9 11a3.500 3.500 0 1 0 0-7 3.500 3.500 0 0 0 0 7zM2.500 20c0-3.500 3-6 6.500-6s6.500 2.500 6.500 6M16 4.500a3.500 3.500 0 0 1 0 6.500M18 14c2.200.8 3.500 3 3.500 6"/>',
+    routes: '<path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/>',
+    stress: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+    report: '<path d="M12 3a9 9 0 1 0 9 9h-9zM15 3.500A9 9 0 0 1 20.500 9H15z"/>',
+    debrief: '<path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 11v6M12 7.500h.01"/>'
+  };
+  function svgIcon(d) { var w = document.createElement('span'); w.className = 'ico'; w.setAttribute('aria-hidden', 'true'); w.innerHTML = '<svg viewBox="0 0 24 24">' + d + '</svg>'; return w; }
   var $app = document.getElementById('app');
   var $status = document.getElementById('status');
   var $steps = document.getElementById('steps');
@@ -90,7 +99,7 @@
   function renderSteps() {
     $steps.innerHTML = '';
     ORDER.forEach(function (s) {
-      var b = h('button', { type: 'button', onclick: function () { go(s); } }, LABEL[s]);
+      var b = h('button', { type: 'button', onclick: function () { go(s); } }, svgIcon(ICON[s]), h('span', { class: 'num', 'aria-hidden': 'true' }, String(ORDER.indexOf(s) + 1)), LABEL[s]);
       if (s === state.screen) b.setAttribute('aria-current', 'step');
       if (!reachable(s)) b.disabled = true;
       $steps.appendChild(h('li', null, b));
@@ -123,20 +132,25 @@
     var rem = h('input', { type: 'checkbox', id: 'rem', onchange: function (e) { state.remember = e.target.checked; save(); } });
     rem.checked = state.remember;
     return h('div', null,
-      heading('Where will the seed come from?'),
-      h('p', { class: 'fiction' }, 'Three fictional farmers, one decision each season. All names, places and details are invented for teaching and do not describe real people. Choose a farmer, look at what they want and what they have, then plan where their seed will come from.'),
+      h('h1', { tabindex: '-1', id: 'h1' }, 'Where will the seed come from?', h('span', { class: 'pill' }, 'Fictional scenario')),
+      h('div', { class: 'fiction' },
+        h('span', { class: 'fic-ico', 'aria-hidden': 'true' }, '!'),
+        h('p', null, 'Three fictional farmers, one decision each season. All names, places and details are invented for teaching and do not describe real people. Choose a farmer, look at what they want and what they have, then plan where their seed will come from.'),
+        h('button', { type: 'button', class: 'btn alt small-btn', onclick: function () { aboutOpen = true; render(); } }, 'Learn more')),
       h('p', null, 'There is no best seed source and no score. Each source meets some needs and misses others. You will see how your plan fits the farmer, test it against something going wrong, and compare with other farmers.'),
       facPanel('start'),
       h('div', { class: 'grid' }, D.farmers.map(function (f) {
         var tried = state.plans[f.id] && state.plans[f.id].main;
-        return h('div', { class: 'card farmer-pick' },
+        return h('div', { class: 'card farmer-pick', 'data-farmer': f.id },
+          h('p', { class: 'eyebrow' }, f.name),
           h('h2', { style: 'margin-top:0' }, f.name, ' ', h('span', { class: 'tag' }, f.crop)),
           h('p', null, f.intro),
-          h('p', { class: 'small' }, f.cropNote + (tried ? ' · you have already planned for ' + f.name : '')),
+          h('ul', { class: 'chips' }, f.cropNote.split(', ').slice(0, 3).map(function (c) { return h('li', null, c); })),
+          tried ? h('p', { class: 'small' }, 'You have already planned for ' + f.name + '.') : null,
           h('button', { type: 'button', class: 'btn', onclick: function () { pickFarmer(f.id); } }, (tried ? 'Open ' : 'Meet ') + f.name));
       })),
       h('div', { class: 'card' },
-        h('label', { class: 'opt', for: 'rem' }, rem, h('span', null, 'Remember my choices on this device. Off by default. Only your route choices are stored, no names or personal data. You can reset at any time from the footer.'))));
+        h('label', { class: 'opt', for: 'rem' }, rem, h('span', null, 'Remember my choices on this device. Off by default. Only your route choices are stored, no names or personal data. You can reset at any time with Reset simulation in the side menu.'))));
   }
   function pickFarmer(id) {
     state.farmerId = id;
